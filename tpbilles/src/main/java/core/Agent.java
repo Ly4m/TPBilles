@@ -1,9 +1,9 @@
-package ia;
+package core;
 
 /**
  * Created by William on 19/01/2016.
  */
-public abstract class Agent {
+public abstract class Agent  {
 
     protected Environnement environnement;
     protected SMA sma;

@@ -1,4 +1,4 @@
-package ia;
+package core;
 
 /**
  * Created by William on 19/01/2016.

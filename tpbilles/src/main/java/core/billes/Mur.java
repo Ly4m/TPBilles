@@ -1,7 +1,7 @@
-package ia.billes;
+package core.billes;
 
-import ia.Environnement;
-import ia.SMA;
+import core.Environnement;
+import core.SMA;
 
 import java.awt.*;
 

@@ -1,4 +1,4 @@
-package ia.billes;
+package core.billes;
 
 public enum Directions {
 	IMMOBILE(0,0),

@@ -1,4 +1,4 @@
-package ia;
+package core;
 
 import java.awt.*;
 
