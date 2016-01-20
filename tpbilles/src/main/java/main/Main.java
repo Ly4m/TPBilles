@@ -1,11 +1,10 @@
 package main;
 
-import ia.AgentPhysique;
-import ia.Environnement;
-import ia.SMA;
-import ia.billes.Bille;
-import ia.billes.Directions;
-import ia.billes.Mur;
+import core.Environnement;
+import core.SMA;
+import core.billes.Bille;
+import core.billes.Directions;
+import core.billes.Mur;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
@@ -13,7 +12,6 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.geometry.Bounds;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
@@ -28,9 +26,9 @@ import java.util.List;
 
 public class Main extends Application {
 
-    private static int largeur = 1200;
-    private static int hauteur = 700;
-    private static int nbAgents = 25;
+    private static int largeur = 8500;
+    private static int hauteur = 4200;
+    private static int nbAgents = 1000;
     private static int tempsAttente = 120;
     private static int tempsArret = 0;
     private static long seed = Calendar.getInstance().getTimeInMillis();
@@ -53,8 +51,21 @@ public class Main extends Application {
         final SMA sma = new SMA(env);
         boolean ok = false;
 
+//         Ajout des murs
+        final int nbCasesY = hauteur / 5;
+        final int nbCasesX = largeur / 5;
+        for (int i = 0; i < nbCasesY; i++) {
+            sma.addAgent(new Mur(env, sma, 0, i, Mur.TypeMur.VERTICAL));
+            sma.addAgent(new Mur(env, sma, nbCasesX - 1, i, Mur.TypeMur.VERTICAL));
+        }
+        for (int i = 1; i < nbCasesX - 1; i++) {
+            sma.addAgent(new Mur(env, sma, i, 0, Mur.TypeMur.HORIZONTAL));
+            sma.addAgent(new Mur(env, sma, i, nbCasesY - 1, Mur.TypeMur.HORIZONTAL));
+        }
+
+
         canvas = new Pane();
-        final Scene scene = new Scene(canvas, largeur, hauteur);
+        final Scene scene = new Scene(canvas, largeur / 5, hauteur / 5);
 
 
         primaryStage.setTitle("Bouncy Bounce");
@@ -74,14 +85,12 @@ public class Main extends Application {
                             .nextInt(Directions.values().length - 1) + 1];
 
                     Bille bille = new Bille(env, sma, posX, posY, direction);
-                    couleur = bille.getCouleur();
                     sma.addAgent(bille);
 
                     ok = true;
 
-                    Circle c = new Circle(5, couleur);
-                    circleObs.add(c);
-                    c.relocate(bille.getPosX(), bille.getPosY());
+
+                    circleObs.add(bille.getCircle());
                 } catch (IllegalArgumentException ignore) {
                 }
             }
@@ -101,7 +110,7 @@ public class Main extends Application {
 
         System.out.println(env.getLocations().length);
 
-        final Timeline loop = new Timeline(new KeyFrame(Duration.millis(10), new EventHandler<ActionEvent>() {
+        final Timeline loop = new Timeline(new KeyFrame(Duration.millis(5), new EventHandler<ActionEvent>() {
 
 
             public void handle(final ActionEvent t) {
@@ -111,6 +120,7 @@ public class Main extends Application {
 
             }
         }));
+
 
         loop.setCycleCount(Timeline.INDEFINITE);
         loop.play();

@@ -15,10 +15,15 @@ import java.awt.*;
 public class Bille extends AgentBille {
 
     public Circle getCircle() {
-        return circle;
+        return this.circle;
     }
 
-    private Circle circle;
+
+
+    public void setCouleur(Color couleur) {
+        this.couleur = couleur;
+    }
+
     private Color couleur;
 
     public Bille(Environnement env, SMA sma, int posX, int posY, Directions direction) {
@@ -26,16 +31,19 @@ public class Bille extends AgentBille {
         int red = Randomizer.randomGenerator.nextInt(255);
         int green = Randomizer.randomGenerator.nextInt(255);
         int blue = Randomizer.randomGenerator.nextInt(255);
-        this.couleur = new Color((float)red/100, 0.4, (float)green/100, 1.0);
-        this.circle = new Circle(5, couleur);
-        this.circle.relocate(posX, posY);
+        this.couleur = new Color((float)red/100, (float)green/100, (float)blue/100, 1.0);
+
+        this.circle = new Circle(2.5, couleur);
+        this.circle.relocate(posX / 5, posY / 5);
     }
 
     @Override
-    public Directions estRencontrePar(AgentBille autre) {
-        Directions maDir = this.direction;
-        this.direction = autre.getDirection();
-        return maDir;
+    public Directions estRencontrePar(AgentBille other) {
+        Directions oldDirection = this.getDirection();
+
+
+        this.direction = other.getDirection();
+        return oldDirection.getOpposeX().getOpposeY();
     }
 
     @Override
@@ -53,11 +61,10 @@ public class Bille extends AgentBille {
         AgentPhysique[][] locations = environnement.getLocations();
         AgentBille agentPresent = (AgentBille) locations[nextPosY][nextPosX];
         if (agentPresent != null) {
-
             this.direction = agentPresent.estRencontrePar(this);
-            System.out.println("change");
             return;
         }
+
 
         locations[posY][posX] = null;
         posX = nextPosX;
