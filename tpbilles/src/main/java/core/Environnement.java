@@ -53,7 +53,7 @@ public class Environnement {
                             .getPosX()
                             + ","
                             + locations[agent.getPosY()][agent.getPosX()]
-                            .getPosY() + ")");
+                            .getPosY() + ") "+agent);
         }
         locations[agent.getPosY()][agent.getPosX()] = agent;
     }
