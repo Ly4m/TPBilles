@@ -19,6 +19,7 @@ public class Nemo extends WaterAgent{
 		super(env, sma, posX, posY, direction);
 		this.circle = new Circle(2.5, Color.CORNFLOWERBLUE);
         this.circle.relocate(posX / 5, posY / 5);
+        estMangeable = true;
 	}
 
 	@Override

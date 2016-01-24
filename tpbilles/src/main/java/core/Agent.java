@@ -10,6 +10,7 @@ public abstract class Agent  {
 
     public Agent(Environnement environnement, SMA sma) {
         super();
+        this.sma = sma;
         this.environnement = environnement;
     }
 

@@ -30,7 +30,7 @@ public class MainWater extends Application {
 
     private static int largeur = 8500;
     private static int hauteur = 4200;
-    private static int nbShark = 5;
+    private static int nbShark = 10;
     private static int nbNemo = 50;
     private static int tempsAttente = 120;
     private static int tempsArret = 0;
@@ -63,9 +63,7 @@ public class MainWater extends Application {
         final int nbCasesY = hauteur / 5;
         final int nbCasesX = largeur / 5;
         for (int i = 0; i < nbCasesY; i++) {
-        	System.out.println(i);
             sma.addAgent(new Mur(env, sma, 0, i, Mur.TypeMur.VERTICAL));
-        	System.out.println(nbCasesX-1);
             sma.addAgent(new Mur(env, sma, nbCasesX - 1, i, Mur.TypeMur.VERTICAL));
         }
         for (int i = 1; i < nbCasesX - 1; i++) {

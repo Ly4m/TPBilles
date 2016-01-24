@@ -30,6 +30,7 @@ public class Mur extends WaterAgent {
 	public Mur(Environnement env, SMA sma, int posX, int posY, TypeMur type) {
 		super(env, sma, posX, posY, Directions.IMMOBILE);
 		this.type = type;
+		estMangeable = false;
 	}
 
 	@Override

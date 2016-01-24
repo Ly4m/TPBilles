@@ -14,6 +14,8 @@ public abstract class WaterAgent extends AgentPhysique {
 	protected Directions direction;
 	
 	protected  Circle circle;
+	
+	protected boolean estMangeable;
 
 	
 	
