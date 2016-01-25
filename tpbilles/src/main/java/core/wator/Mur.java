@@ -1,10 +1,11 @@
 package core.wator;
 
+import java.awt.Color;
+import java.awt.Graphics;
+
 import core.Environnement;
 import core.SMA;
 import core.billes.Directions;
-
-import java.awt.*;
 
 public class Mur extends WaterAgent {
 
