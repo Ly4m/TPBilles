@@ -13,7 +13,7 @@ public class Environnement {
         super();
         this.largeur = largeur;
         this.hauteur = hauteur;
-        this.locations = new AgentPhysique[hauteur / AgentPhysique.getTaille()][largeur / AgentPhysique.getTaille()];
+        this.locations = new AgentPhysique[hauteur][largeur];
         this.nbAgentsMax = locations.length * locations[0].length;
     }
 

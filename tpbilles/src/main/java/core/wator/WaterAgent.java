@@ -11,6 +11,7 @@ public abstract class WaterAgent extends AgentPhysique {
 	protected Directions direction;
 
 	protected Circle circle;
+	protected int round;
 
 	public void setCircle(Circle circle) {
 		this.circle = circle;
@@ -41,4 +42,5 @@ public abstract class WaterAgent extends AgentPhysique {
 	}
 
 	public abstract Directions estRencontrePar(WaterAgent autre);
+
 }

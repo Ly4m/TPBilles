@@ -26,10 +26,10 @@ import tools.Randomizer;
 
 public class MainWater extends Application {
 
-	private static int largeur = 8500;
-	private static int hauteur = 4200;
-	private static int nbShark = 40;
-	private static int nbNemo = 100;
+	private static int largeur = 640;
+	private static int hauteur = 640;
+	private static int nbShark = 0;
+	private static int nbNemo = 10000;
 	private static int tempsAttente = 120;
 	private static int tempsArret = 0;
 	private static long seed = Calendar.getInstance().getTimeInMillis();
@@ -55,47 +55,35 @@ public class MainWater extends Application {
 		final SMA sma = new SMA(env);
 		boolean ok = false;
 
-		// Ajout des murs
-		final int nbCasesY = hauteur / 5;
-		final int nbCasesX = largeur / 5;
-		for (int i = 0; i < nbCasesY; i++) {
-			sma.addAgent(new Mur(env, sma, 0, i, Mur.TypeMur.VERTICAL));
-			sma.addAgent(new Mur(env, sma, nbCasesX - 1, i, Mur.TypeMur.VERTICAL));
-		}
-		for (int i = 1; i < nbCasesX - 1; i++) {
-			sma.addAgent(new Mur(env, sma, i, 0, Mur.TypeMur.HORIZONTAL));
-			sma.addAgent(new Mur(env, sma, i, nbCasesY - 1, Mur.TypeMur.HORIZONTAL));
-		}
-
 		canvas = new Pane();
-		final Scene scene = new Scene(canvas, largeur / 5, hauteur / 5);
+		final Scene scene = new Scene(canvas, largeur /5, hauteur / 5);
 
 		primaryStage.setTitle("Chase me");
 		primaryStage.setScene(scene);
 		primaryStage.show();
 
 		// Ajout des requins
-		for (int i = 0; i < nbShark; i++) {
-			ok = false;
-			while (!ok) {
-				try {
-					final int posX = Randomizer.randomGenerator.nextInt(env.getLocations()[0].length);
-					final int posY = Randomizer.randomGenerator.nextInt(env.getLocations().length);
-					final Directions direction = Directions
-							.values()[Randomizer.randomGenerator.nextInt(Directions.values().length - 1) + 1];
+//		for (int i = 0; i < nbShark; i++) {
+//			ok = false;
+//			while (!ok) {
+//				try {
+//					final int posX = Randomizer.randomGenerator.nextInt(env.getLocations()[0].length);
+//					final int posY = Randomizer.randomGenerator.nextInt(env.getLocations().length);
+//					final Directions direction = Directions
+//							.values()[Randomizer.randomGenerator.nextInt(Directions.values().length - 1) + 1];
+//
+//					Shark shark = new Shark(env, sma, posX, posY, direction);
+//					sma.addAgent(shark);
+//
+//					ok = true;
+//
+//					circleObs.add(shark.getCircle());
+//				} catch (IllegalArgumentException ignore) {
+//				}
+//			}
+//		}
 
-					Shark shark = new Shark(env, sma, posX, posY, direction);
-					sma.addAgent(shark);
-
-					ok = true;
-
-					circleObs.add(shark.getCircle());
-				} catch (IllegalArgumentException ignore) {
-				}
-			}
-
-		}
-
+		// ajout de nemoes
 		for (int i = 0; i < nbNemo; i++) {
 			ok = false;
 			while (!ok) {
@@ -107,7 +95,6 @@ public class MainWater extends Application {
 
 					Nemo nemo = new Nemo(env, sma, posX, posY, direction);
 					sma.addAgent(nemo);
-
 					ok = true;
 
 					circleObs.add(nemo.getCircle());
@@ -117,8 +104,6 @@ public class MainWater extends Application {
 
 		}
 
-		// circle.forEach(b -> canvas.getChildren().addAll(b));
-
 		canvas.getChildren().addAll(circleObs);
 
 		final long start = Calendar.getInstance().getTimeInMillis();
@@ -126,7 +111,6 @@ public class MainWater extends Application {
 		int nbTours = 0;
 		double tempsTotalRun = 0;
 
-		System.out.println(env.getLocations().length);
 
 		final Timeline loop = new Timeline(new KeyFrame(Duration.millis(5), new EventHandler<ActionEvent>() {
 

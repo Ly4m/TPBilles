@@ -34,7 +34,6 @@ public class SMA {
 
 	public void run() {
 		update();
-		System.out.println(agents.size());
 		if (shuffle) {
 			Collections.shuffle(agents);
 		}
@@ -88,8 +87,6 @@ public class SMA {
 	private void removeAgent(Agent agent) {
 		if (agent.isPhysique()) {
 			env.getLocations()[((WaterAgent) agent).posY][((WaterAgent) agent).posX] = null;
-			((WaterAgent) agent).getCircle().relocate(-60, -60);
-
 			env.removeAgent((AgentPhysique) agent);
 		}
 		this.agents.remove(agent);

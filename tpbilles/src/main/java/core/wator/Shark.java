@@ -72,30 +72,30 @@ public class Shark extends WaterAgent {
 	}
 
 	private Directions nearTarget(AgentPhysique[][] locations) {
-		if (locations[posY + Directions.DROITE.getDirY()][posX + Directions.DROITE.getDirX()] != null) {
-			return Directions.DROITE;
-		}
-		if (locations[posY + Directions.HAUT.getDirY()][posX + Directions.HAUT.getDirX()] != null) {
-			return Directions.HAUT;
-		}
-		if (locations[posY + Directions.HAUT_DROITE.getDirY()][posX + Directions.HAUT_DROITE.getDirX()] != null) {
-			return Directions.HAUT_DROITE;
-		}
-		if (locations[posY + Directions.GAUCHE.getDirY()][posX + Directions.GAUCHE.getDirX()] != null) {
-			return Directions.GAUCHE;
-		}
-		if (locations[posY + Directions.BAS_DROITE.getDirY()][posX + Directions.BAS_DROITE.getDirX()] != null) {
-			return Directions.BAS_DROITE;
-		}
-		if (locations[posY + Directions.BAS_GAUCHE.getDirY()][posX + Directions.BAS_GAUCHE.getDirX()] != null) {
-			return Directions.BAS_GAUCHE;
-		}
-		if (locations[posY + Directions.HAUT_GAUCHE.getDirY()][posX + Directions.HAUT_GAUCHE.getDirX()] != null) {
-			return Directions.HAUT_GAUCHE;
-		}
-		if (locations[posY + Directions.BAS.getDirY()][posX + Directions.BAS.getDirX()] != null) {
-			return Directions.BAS;
-		}
+//		if (locations[posY + Directions.DROITE.getDirY()][posX + Directions.DROITE.getDirX()] != null) {
+//			return Directions.DROITE;
+//		}
+//		if (locations[posY + Directions.HAUT.getDirY()][posX + Directions.HAUT.getDirX()] != null) {
+//			return Directions.HAUT;
+//		}
+//		if (locations[posY + Directions.HAUT_DROITE.getDirY()][posX + Directions.HAUT_DROITE.getDirX()] != null) {
+//			return Directions.HAUT_DROITE;
+//		}
+//		if (locations[posY + Directions.GAUCHE.getDirY()][posX + Directions.GAUCHE.getDirX()] != null) {
+//			return Directions.GAUCHE;
+//		}
+//		if (locations[posY + Directions.BAS_DROITE.getDirY()][posX + Directions.BAS_DROITE.getDirX()] != null) {
+//			return Directions.BAS_DROITE;
+//		}
+//		if (locations[posY + Directions.BAS_GAUCHE.getDirY()][posX + Directions.BAS_GAUCHE.getDirX()] != null) {
+//			return Directions.BAS_GAUCHE;
+//		}
+//		if (locations[posY + Directions.HAUT_GAUCHE.getDirY()][posX + Directions.HAUT_GAUCHE.getDirX()] != null) {
+//			return Directions.HAUT_GAUCHE;
+//		}
+//		if (locations[posY + Directions.BAS.getDirY()][posX + Directions.BAS.getDirX()] != null) {
+//			return Directions.BAS;
+//		}
 
 		return null;
 	}
@@ -106,5 +106,10 @@ public class Shark extends WaterAgent {
 
 		this.direction = other.getDirection();
 		return oldDirection.getOpposeX().getOpposeY();
+	}
+
+	private void meurt(AgentPhysique[][] locations) {
+		locations[this.posY][this.posX] = null;
+		sma.removeAgentApres(this);
 	}
 }
