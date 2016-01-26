@@ -13,83 +13,82 @@ import core.wator.WaterAgent;
  */
 public class SMA {
 
-	private Environnement env;
-	private List<Agent> agents;
-	private Set<Agent> agentsASupprimer;
-	private Set<Agent> agentsAAjouter;
-	private boolean shuffle = true;
+    private Environnement env;
+    private List<Agent> agents;
+    private Set<Agent> agentsASupprimer;
+    private Set<Agent> agentsAAjouter;
+    private boolean shuffle = true;
 
-	public SMA(Environnement env, boolean shuffle) {
-		this(env);
-		this.shuffle = shuffle;
-	}
+    public SMA(Environnement env, boolean shuffle) {
+        this(env);
+        this.shuffle = shuffle;
+    }
 
-	public SMA(Environnement env) {
-		super();
-		this.env = env;
-		this.agents = new LinkedList<Agent>();
-		this.agentsASupprimer = new HashSet<Agent>();
-		this.agentsAAjouter = new HashSet<Agent>();
-	}
+    public SMA(Environnement env) {
+        super();
+        this.env = env;
+        this.agents = new LinkedList<Agent>();
+        this.agentsASupprimer = new HashSet<Agent>();
+        this.agentsAAjouter = new HashSet<Agent>();
+    }
 
-	public void run() {
-		update();
-		if (shuffle) {
-			Collections.shuffle(agents);
-		}
-		for (Agent agent : agents) {
-			agent.decide();
-		}
-	}
+    public void run() {
+        update();
+        if (shuffle) {
+            Collections.shuffle(agents);
+        }
+        for (Agent agent : agents) {
+            agent.decide();
+        }
+    }
 
-	public Environnement getEnv() {
-		return env;
-	}
+    public Environnement getEnv() {
+        return env;
+    }
 
-	public void setEnv(Environnement env) {
-		this.env = env;
-	}
+    public void setEnv(Environnement env) {
+        this.env = env;
+    }
 
-	public List<Agent> getAgents() {
-		return Collections.unmodifiableList(this.agents);
-	}
+    public List<Agent> getAgents() {
+        return Collections.unmodifiableList(this.agents);
+    }
 
-	public void addAgent(Agent agent) {
-		if (agent.isPhysique()) { // On n'ajoute à l'environnement que les
-			// agentsPhysiques
-			env.addAgent((AgentPhysique) agent);
-		}
-		this.agents.add(0, agent);
-	}
+    public void addAgent(Agent agent) {
+        if (agent.isPhysique()) { // On n'ajoute à l'environnement que les
+            // agentsPhysiques
+            env.addAgent((AgentPhysique) agent);
+        }
+        this.agents.add(0, agent);
+    }
 
-	public void addAgentApres(Agent agent) {
-		this.agentsAAjouter.add(agent);
-	}
+    public void addAgentApres(Agent agent) {
+        this.agentsAAjouter.add(agent);
+    }
 
-	public void removeAgentApres(Agent agent) {
-		this.agentsASupprimer.add(agent);
-	}
+    public void removeAgentApres(Agent agent) {
+        this.agentsASupprimer.add(agent);
+    }
 
-	public void removeAgentApres(Set<Agent> agents) {
-		this.agentsASupprimer.addAll(agents);
-	}
+    public void removeAgentApres(Set<Agent> agents) {
+        this.agentsASupprimer.addAll(agents);
+    }
 
-	public void update() {
-		System.out.println(this.agents.size());
-		this.agents.addAll(agentsAAjouter);
-		this.agentsAAjouter.clear();
-		for (Agent a : agentsASupprimer) {
-			this.removeAgent(a);
-		}
-		this.agentsASupprimer.clear();
+    public void update() {
+        this.agents.addAll(agentsAAjouter);
+        this.agentsAAjouter.clear();
+        for (Agent a : agentsASupprimer) {
+            this.removeAgent(a);
+        }
+        this.agentsASupprimer.clear();
 
-	}
+    }
 
-	private void removeAgent(Agent agent) {
-		if (agent.isPhysique()) {
-			env.getLocations()[((WaterAgent) agent).posY][((WaterAgent) agent).posX] = null;
-			env.removeAgent((AgentPhysique) agent);
-		}
-		this.agents.remove(agent);
-	}
+    private void removeAgent(Agent agent) {
+        if (agent.isPhysique()) {
+            env.getLocations()[((WaterAgent) agent).posY][((WaterAgent) agent).posX] = null;
+            env.removeAgent((AgentPhysique) agent);
+        }
+        this.agents.remove(agent);
+    }
 }

@@ -20,9 +20,7 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 import tools.Randomizer;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.List;
+import java.util.*;
 
 public class Main extends Application {
 
@@ -62,6 +60,7 @@ public class Main extends Application {
             sma.addAgent(new Mur(env, sma, i, 0, Mur.TypeMur.HORIZONTAL));
             sma.addAgent(new Mur(env, sma, i, nbCasesY - 1, Mur.TypeMur.HORIZONTAL));
         }
+
 
 
         canvas = new Pane();

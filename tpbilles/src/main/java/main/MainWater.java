@@ -27,10 +27,10 @@ import tools.Randomizer;
 
 public class MainWater extends Application {
 
-	private static int largeur = 200;
-	private static int hauteur = 200;
+	private static int largeur = 150;
+	private static int hauteur = 150;
 	private static int nbShark = 1000;
-	private static int nbNemo = 2500;
+	private static int nbNemo = 2000;
 	private static int tempsAttente = 120;
 	private static int tempsArret = 0;
 	private static final int SIZE = 5;
@@ -58,14 +58,7 @@ public class MainWater extends Application {
 		boolean ok = false;
 
 		canvas = new Pane();
-		final Scene scene = new Scene(canvas, largeur, hauteur);
-
-//		for(int i = SIZE; i < hauteur; i += SIZE ){
-//			canvas.getChildren().addAll(new Line(0, i, largeur, i));
-//		}
-//		for(int i = SIZE; i < largeur; i += SIZE ){
-//			canvas.getChildren().addAll(new Line(i, 0, i, hauteur));
-//		}
+		final Scene scene = new Scene(canvas, largeur * 5, hauteur * 5);
 
 		primaryStage.setTitle("Chase me");
 		primaryStage.setScene(scene);
@@ -121,7 +114,7 @@ public class MainWater extends Application {
 		double tempsTotalRun = 0;
 
 
-		final Timeline loop = new Timeline(new KeyFrame(Duration.millis(33), new EventHandler<ActionEvent>() {
+		final Timeline loop = new Timeline(new KeyFrame(Duration.millis(16), new EventHandler<ActionEvent>() {
 
 			public void handle(final ActionEvent t) {
 

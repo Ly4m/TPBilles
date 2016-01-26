@@ -15,78 +15,80 @@ import tools.Randomizer;
  * Created by leemans & Piorun on 20/01/16.
  */
 public class Nemo extends WaterAgent {
-	final private int TEMPS_AVANT_REPRODUCTION = 12;
+    final private int TEMPS_AVANT_REPRODUCTION = 2;
 
-	public Nemo(Environnement env, SMA sma, int posX, int posY, Directions direction) {
-		super(env, sma, posX, posY, direction);
-		this.circle = new Circle(2.5, Color.CORNFLOWERBLUE);
-		this.circle.relocate(posX*2.5, posY*2.5);
-		estMangeable = true;
-	}
+    public Nemo(Environnement env, SMA sma, int posX, int posY, Directions direction) {
+        super(env, sma, posX, posY, direction);
+        this.circle = new Circle(2.5, Color.CORNFLOWERBLUE);
+        this.circle.relocate(posX * 5, posY * 5);
+        estMangeable = true;
+    }
 
-	@Override
-	public void dessine(Graphics g) {
+    @Override
+    public void dessine(Graphics g) {
 
-	}
+    }
 
-	@Override
-	public void decide() {
+    @Override
+    public void decide() {
 
+        final Directions direction = findRandomEmptyCase();
 
+        int oldX = posX;
+        int oldY = posY;
 
-
-        final Directions direction = Directions.values()[Randomizer.randomGenerator.nextInt(Directions.values().length - 1) + 1];
-
-		int oldX = posX;
-		int oldY = posY;
-
-        int nextPosX = (posX + direction.getDirX()+ environnement.getLargeur())  % environnement.getLargeur() ;
-		int nextPosY = (posY + direction.getDirY()+ environnement.getHauteur()) % environnement.getHauteur();
+        int nextPosX = (posX + direction.getDirX() + environnement.getLargeur()) % environnement.getLargeur();
+        int nextPosY = (posY + direction.getDirY() + environnement.getHauteur()) % environnement.getHauteur();
 
         AgentPhysique[][] locations = environnement.getLocations();
         WaterAgent agentPresent = (WaterAgent) locations[nextPosY][nextPosX];
-		if (agentPresent != null) {
-			this.direction = agentPresent.estRencontrePar(this);
-			return;
-		}
 
-		locations[posY][posX] = null;
-		posX = nextPosX;
-		posY = nextPosY;
-		locations[posY][posX] = this;
-		this.circle.relocate(posX * 2.5, posY * 2.5);
+        if (agentPresent != null) {
+            return;
+        }
 
-		if (this.birthCount > TEMPS_AVANT_REPRODUCTION) {
+        locations[posY][posX] = null;
+        posX = nextPosX;
+        posY = nextPosY;
+        locations[posY][posX] = this;
+        this.circle.relocate(posX * 5, posY * 5);
 
-			faireUnBaybay(environnement.getLocations(), oldX, oldY);
-			this.birthCount = 0;
-		} else {
-			this.birthCount++;
+        if (this.birthCount > TEMPS_AVANT_REPRODUCTION) {
 
-		}
+            faireUnBaybay(environnement.getLocations(), oldX, oldY);
+            this.birthCount = 0;
+        } else {
+            this.birthCount++;
 
-	}
+        }
 
-	@Override
-	public Directions estRencontrePar(WaterAgent other) {
-		Directions oldDirection = this.getDirection();
+    }
 
-		this.direction = other.getDirection();
+    @Override
+    public Directions estRencontrePar(WaterAgent other) {
+        Directions oldDirection = this.getDirection();
+
+        this.direction = other.getDirection();
 //		this.meurt(environnement.getLocations());
-		return oldDirection.getOpposeX().getOpposeY();
-	}
+        return oldDirection.getOpposeX().getOpposeY();
+    }
 
 
-	private void faireUnBaybay(AgentPhysique[][] locations, int posX, int posY) {
-		final Directions direction = Directions.values()[Randomizer.randomGenerator.nextInt(Directions.values().length - 1) + 1];
+    private void faireUnBaybay(AgentPhysique[][] locations, int posX, int posY) {
+        Directions dir = findRandomEmptyCase();
 
-		Nemo bebe = new Nemo(environnement, sma, posX, posY, direction);
-		try {
-			this.environnement.addAgent(bebe);
-			sma.addAgentApres(bebe);
-			MainWater.canvas.getChildren().addAll(bebe.getCircle());
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
+
+        int nextPosX = (posX + dir.getDirX() + environnement.getLargeur()) % environnement.getLargeur();
+        int nextPosY = (posY + dir.getDirY() + environnement.getHauteur()) % environnement.getHauteur();
+
+        Nemo bebe = new Nemo(environnement, sma, nextPosX, nextPosY, direction);
+
+        try {
+            this.environnement.addAgent(bebe);
+            sma.addAgentApres(bebe);
+            MainWater.canvas.getChildren().addAll(bebe.getCircle());
+        } catch (Exception e) {
+//			e.printStackTrace();
+        }
+    }
 }
