@@ -5,6 +5,7 @@ import core.SMA;
 import core.billes.Directions;
 import core.wator.Nemo;
 import core.wator.Shark;
+import javafx.animation.AnimationTimer;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
@@ -14,9 +15,10 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Scene;
-import javafx.scene.chart.PieChart;
+import javafx.scene.chart.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
 import javafx.util.Duration;
@@ -25,131 +27,235 @@ import tools.Randomizer;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class MainWater extends Application {
 
-	private static int largeur = 100;
-	private static int hauteur = 100;
-	private static int nbShark = 80;
-	private static int nbNemo = 600;
-	private static int tempsAttente = 120;
-	private static int tempsArret = 0;
-	private static final int SIZE = 5;
-	private static long seed = Calendar.getInstance().getTimeInMillis();
-
-	public static List<Circle> Circle;
-
-	public static int nemoCount = nbNemo;
-	public static int sharckCount = nbShark;
+    //KENJI
+    private static final int MAX_DATA_POINTS = 50;
+    private XYChart.Series sharkSeries;
+    private XYChart.Series nemoSeries;
+    private int xSeriesData = 0;
+    private ConcurrentLinkedQueue<Number> sharkDataQ = new ConcurrentLinkedQueue<Number>();
+    private ConcurrentLinkedQueue<Number> nemoDataQ = new ConcurrentLinkedQueue<Number>();
+    private ExecutorService executor;
+    private AddToQueue addToQueue;
+    private Timeline timeline2;
+    private NumberAxis xAxis;
 
 
-	public static ObservableList<Circle> CircleObs;
-	public static Pane canvas;
+    //LEGIT
+    private static int largeur = 100;
+    private static int hauteur = 100;
+    private static int nbShark = 80;
+    private static int nbNemo = 600;
+    private static int tempsAttente = 120;
+    private static int tempsArret = 0;
+    private static final int SIZE = 5;
+    private static long seed = Calendar.getInstance().getTimeInMillis();
 
-	public static void main(String[] args) {
-		launch(args);
-	}
+    public static List<Circle> Circle;
 
-	@Override
-	public void start(Stage primaryStage) throws Exception {
+    public static int nemoCount = nbNemo;
+    public static int sharckCount = nbShark;
 
-		Circle = new ArrayList<Circle>();
 
-		CircleObs = FXCollections.observableArrayList(Circle);
+    public static ObservableList<Circle> CircleObs;
+    public static Pane canvas;
 
-		Randomizer.setSeed(seed);
-		final Environnement env = new Environnement(largeur, hauteur);
-		final SMA sma = new SMA(env);
-		boolean ok = false;
+    public static void main(String[] args) {
+        launch(args);
+    }
 
-		Group root  = new Group();
-		canvas = new Pane();
-		HBox hbox = new HBox(canvas);
-		root.getChildren().add(hbox);
-		final Scene scene = new Scene(root, largeur * 5, hauteur * 5);
+    @Override
+    public void start(Stage primaryStage) throws Exception {
 
-		primaryStage.setTitle("Chase me");
+        Circle = new ArrayList<Circle>();
+
+        CircleObs = FXCollections.observableArrayList(Circle);
+
+        Randomizer.setSeed(seed);
+        final Environnement env = new Environnement(largeur, hauteur);
+        final SMA sma = new SMA(env);
+        boolean ok = false;
+
+        Group root = new Group();
+        canvas = new Pane();
+        HBox hbox = new HBox(canvas);
+        root.getChildren().add(hbox);
+        final Scene scene = new Scene(root, largeur * 5, hauteur * 5);
+
+        primaryStage.setTitle("Chase me");
 
 //		 Ajout des requins
-		for (int i = 0; i < nbShark; i++) {
-			ok = false;
-			while (!ok) {
-				try {
-					final int posX = Randomizer.randomGenerator.nextInt(env.getLocations()[0].length);
-					final int posY = Randomizer.randomGenerator.nextInt(env.getLocations().length);
-					final Directions direction = Directions
-							.values()[Randomizer.randomGenerator.nextInt(Directions.values().length - 1) + 1];
+        for (int i = 0; i < nbShark; i++) {
+            ok = false;
+            while (!ok) {
+                try {
+                    final int posX = Randomizer.randomGenerator.nextInt(env.getLocations()[0].length);
+                    final int posY = Randomizer.randomGenerator.nextInt(env.getLocations().length);
+                    final Directions direction = Directions
+                            .values()[Randomizer.randomGenerator.nextInt(Directions.values().length - 1) + 1];
 
-					Shark shark = new Shark(env, sma, posX, posY, direction);
-					sma.addAgent(shark);
+                    Shark shark = new Shark(env, sma, posX, posY, direction);
+                    sma.addAgent(shark);
 
-					ok = true;
+                    ok = true;
 
-					CircleObs.add(shark.getCircle());
-				} catch (IllegalArgumentException ignore) {
-				}
-			}
-		}
+                    CircleObs.add(shark.getCircle());
+                } catch (IllegalArgumentException ignore) {
+                }
+            }
+        }
 
-		// ajout de nemoes
-		for (int i = 0; i < nbNemo; i++) {
-			ok = false;
-			while (!ok) {
-				try {
-					final int posX = Randomizer.randomGenerator.nextInt(env.getLocations()[0].length);
-					final int posY = Randomizer.randomGenerator.nextInt(env.getLocations().length);
-					final Directions direction = Directions
-							.values()[Randomizer.randomGenerator.nextInt(Directions.values().length - 1) + 1];
+        // ajout de nemoes
+        for (int i = 0; i < nbNemo; i++) {
+            ok = false;
+            while (!ok) {
+                try {
+                    final int posX = Randomizer.randomGenerator.nextInt(env.getLocations()[0].length);
+                    final int posY = Randomizer.randomGenerator.nextInt(env.getLocations().length);
+                    final Directions direction = Directions
+                            .values()[Randomizer.randomGenerator.nextInt(Directions.values().length - 1) + 1];
 
-					Nemo nemo = new Nemo(env, sma, posX, posY, direction);
-					sma.addAgent(nemo);
-					ok = true;
+                    Nemo nemo = new Nemo(env, sma, posX, posY, direction);
+                    sma.addAgent(nemo);
+                    ok = true;
 
-					CircleObs.add(nemo.getCircle());
-				} catch (IllegalArgumentException ignore) {
-				}
-			}
+                    CircleObs.add(nemo.getCircle());
+                } catch (IllegalArgumentException ignore) {
+                }
+            }
 
-		}
+        }
 
-		canvas.getChildren().addAll(CircleObs);
+        canvas.getChildren().addAll(CircleObs);
 
-		final long start = Calendar.getInstance().getTimeInMillis();
-		final long stop = tempsArret * 1000;
-		int nbTours = 0;
-		double tempsTotalRun = 0;
-
-
+        final long start = Calendar.getInstance().getTimeInMillis();
+        final long stop = tempsArret * 1000;
+        int nbTours = 0;
+        double tempsTotalRun = 0;
 
 
+        PieChart.Data sharkData = new PieChart.Data("shark", sharckCount);
+        PieChart.Data nemoData = new PieChart.Data("nemo", nemoCount);
 
-		PieChart.Data sharkData = new PieChart.Data("shark", sharckCount);
-		PieChart.Data nemoData = new PieChart.Data("nemo", nemoCount);
+        ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList(sharkData, nemoData);
+        final PieChart chart = new PieChart(pieChartData);
 
-		ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList(sharkData, nemoData);
-		final PieChart chart = new PieChart(pieChartData);
+        chart.setTitle("Proportion");
+        VBox vbox = new VBox(chart);
+        hbox.getChildren().addAll(vbox);
 
-		chart.setTitle("Proportion");
+//KENJI
+        xAxis = new NumberAxis(0, MAX_DATA_POINTS, MAX_DATA_POINTS / 10);
+        xAxis.setForceZeroInRange(false);
+        xAxis.setAutoRanging(false);
 
-		hbox.getChildren().addAll(chart);
+        NumberAxis yAxis = new NumberAxis();
+        yAxis.setAutoRanging(true);
 
-		primaryStage.setScene(scene);
-		primaryStage.show();
+        // -- Chart
+        final LineChart<Number, Number> sc = new LineChart<Number, Number>(xAxis, yAxis) {
+            // Override to remove symbols on each data point
+            @Override
+            protected void dataItemAdded(Series<Number, Number> series, int itemIndex, Data<Number, Number> item) {
+            }
+        };
+        sc.setAnimated(false);
+        sc.setId("PopulationChart");
+        sc.setTitle("Poululation chart");
+
+        // -- Chart Series
+        sharkSeries = new AreaChart.Series<Number, Number>();
+        sharkSeries.setName("Shark");
+        sc.getData().add(sharkSeries);
+
+        nemoSeries = new AreaChart.Series<Number, Number>();
+        nemoSeries.setName("Nemo");
+        sc.getData().add(nemoSeries);
+
+        vbox.getChildren().addAll(sc);
 
 
-		final Timeline loop = new Timeline(new KeyFrame(Duration.millis(60), new EventHandler<ActionEvent>() {
 
-			public void handle(final ActionEvent t) {
+        primaryStage.setScene(scene);
+        primaryStage.show();
 
-				sma.run();
-				pieChartData.get(0).setPieValue(sharckCount);
-				pieChartData.get(1).setPieValue(nemoCount);
+        // -- Prepare Executor Services
+        executor = Executors.newCachedThreadPool();
+        addToQueue = new AddToQueue();
+        executor.execute(addToQueue);
+        // -- Prepare Timeline
+        prepareTimeline();
 
-			}
-		}));
 
-		loop.setCycleCount(Timeline.INDEFINITE);
-		loop.play();
-	}
+        final Timeline loop = new Timeline(new KeyFrame(Duration.millis(60), new EventHandler<ActionEvent>() {
+
+            public void handle(final ActionEvent t) {
+
+                sma.run();
+                pieChartData.get(0).setPieValue(sharckCount);
+                pieChartData.get(1).setPieValue(nemoCount);
+
+            }
+        }));
+
+        loop.setCycleCount(Timeline.INDEFINITE);
+        loop.play();
+    }
+
+    private class AddToQueue implements Runnable {
+        public void run() {
+            try {
+                // add a item of random data to queue
+                sharkDataQ.add(sharckCount);
+                nemoDataQ.add(nemoCount);
+                Thread.sleep(50);
+                executor.execute(this);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(AreaChartSample.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+
+    // -- Timeline gets called in the JavaFX Main thread
+    private void prepareTimeline() {
+        // Every frame to take any data from queue and add to chart
+        new AnimationTimer() {
+            @Override
+            public void handle(long now) {
+                addDataToSeries();
+            }
+        }.start();
+    }
+
+    private void addDataToSeries() {
+        for (int i = 0; i < 20; i++) { // -- add 20 numbers to the plot+
+            if (sharkDataQ.isEmpty())
+                break;
+            sharkSeries.getData().add(new AreaChart.Data(xSeriesData++, sharkDataQ.remove()));
+        }
+
+        for (int i = 0; i < 20; i++) { // -- add 20 numbers to the plot+
+            if (nemoDataQ.isEmpty())
+                break;
+            nemoSeries.getData().add(new AreaChart.Data(xSeriesData, nemoDataQ.remove()));
+        }
+        // remove points to keep us at no more than MAX_DATA_POINTS
+        if (sharkSeries.getData().size() > MAX_DATA_POINTS) {
+            sharkSeries.getData().remove(0, sharkSeries.getData().size() - MAX_DATA_POINTS);
+        }
+        if (nemoSeries.getData().size() > MAX_DATA_POINTS) {
+            nemoSeries.getData().remove(0, nemoSeries.getData().size() - MAX_DATA_POINTS);
+        }
+        // update
+        xAxis.setLowerBound(xSeriesData - MAX_DATA_POINTS);
+        xAxis.setUpperBound(xSeriesData - 1);
+    }
 
 }
