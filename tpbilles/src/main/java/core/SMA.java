@@ -75,6 +75,7 @@ public class SMA {
 	}
 
 	public void update() {
+		System.out.println(this.agents.size());
 		this.agents.addAll(agentsAAjouter);
 		this.agentsAAjouter.clear();
 		for (Agent a : agentsASupprimer) {

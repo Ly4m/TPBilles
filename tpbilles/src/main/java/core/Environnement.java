@@ -44,7 +44,7 @@ public class Environnement {
     public void addAgent(AgentPhysique agent) {
         if (locations[agent.getPosY()][agent.getPosX()] != null) {
             throw new IllegalArgumentException(
-                    "Deux billes se trouvent dans la même case :\n("
+                    "Deux agents se trouvent dans la même case :\n("
                             + agent.getPosX()
                             + ","
                             + agent.getPosY()

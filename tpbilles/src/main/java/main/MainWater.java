@@ -20,18 +20,20 @@ import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.Line;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import tools.Randomizer;
 
 public class MainWater extends Application {
 
-	private static int largeur = 640;
-	private static int hauteur = 640;
-	private static int nbShark = 0;
-	private static int nbNemo = 10000;
+	private static int largeur = 200;
+	private static int hauteur = 200;
+	private static int nbShark = 1000;
+	private static int nbNemo = 2500;
 	private static int tempsAttente = 120;
 	private static int tempsArret = 0;
+	private static final int SIZE = 5;
 	private static long seed = Calendar.getInstance().getTimeInMillis();
 
 	public static List<Circle> circle;
@@ -56,32 +58,39 @@ public class MainWater extends Application {
 		boolean ok = false;
 
 		canvas = new Pane();
-		final Scene scene = new Scene(canvas, largeur /5, hauteur / 5);
+		final Scene scene = new Scene(canvas, largeur, hauteur);
+
+//		for(int i = SIZE; i < hauteur; i += SIZE ){
+//			canvas.getChildren().addAll(new Line(0, i, largeur, i));
+//		}
+//		for(int i = SIZE; i < largeur; i += SIZE ){
+//			canvas.getChildren().addAll(new Line(i, 0, i, hauteur));
+//		}
 
 		primaryStage.setTitle("Chase me");
 		primaryStage.setScene(scene);
 		primaryStage.show();
 
-		// Ajout des requins
-//		for (int i = 0; i < nbShark; i++) {
-//			ok = false;
-//			while (!ok) {
-//				try {
-//					final int posX = Randomizer.randomGenerator.nextInt(env.getLocations()[0].length);
-//					final int posY = Randomizer.randomGenerator.nextInt(env.getLocations().length);
-//					final Directions direction = Directions
-//							.values()[Randomizer.randomGenerator.nextInt(Directions.values().length - 1) + 1];
-//
-//					Shark shark = new Shark(env, sma, posX, posY, direction);
-//					sma.addAgent(shark);
-//
-//					ok = true;
-//
-//					circleObs.add(shark.getCircle());
-//				} catch (IllegalArgumentException ignore) {
-//				}
-//			}
-//		}
+//		 Ajout des requins
+		for (int i = 0; i < nbShark; i++) {
+			ok = false;
+			while (!ok) {
+				try {
+					final int posX = Randomizer.randomGenerator.nextInt(env.getLocations()[0].length);
+					final int posY = Randomizer.randomGenerator.nextInt(env.getLocations().length);
+					final Directions direction = Directions
+							.values()[Randomizer.randomGenerator.nextInt(Directions.values().length - 1) + 1];
+
+					Shark shark = new Shark(env, sma, posX, posY, direction);
+					sma.addAgent(shark);
+
+					ok = true;
+
+					circleObs.add(shark.getCircle());
+				} catch (IllegalArgumentException ignore) {
+				}
+			}
+		}
 
 		// ajout de nemoes
 		for (int i = 0; i < nbNemo; i++) {
@@ -112,7 +121,7 @@ public class MainWater extends Application {
 		double tempsTotalRun = 0;
 
 
-		final Timeline loop = new Timeline(new KeyFrame(Duration.millis(5), new EventHandler<ActionEvent>() {
+		final Timeline loop = new Timeline(new KeyFrame(Duration.millis(33), new EventHandler<ActionEvent>() {
 
 			public void handle(final ActionEvent t) {
 

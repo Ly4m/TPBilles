@@ -11,7 +11,7 @@ public abstract class WaterAgent extends AgentPhysique {
 	protected Directions direction;
 
 	protected Circle circle;
-	protected int round;
+	protected int age, birthCount, starvingCount;
 
 	public void setCircle(Circle circle) {
 		this.circle = circle;
@@ -42,5 +42,11 @@ public abstract class WaterAgent extends AgentPhysique {
 	}
 
 	public abstract Directions estRencontrePar(WaterAgent autre);
+
+	public void meurt(AgentPhysique[][] locations) {
+		environnement.removeAgent(this);
+		this.circle.setOpacity(0);
+		sma.removeAgentApres(this);
+	}
 
 }
