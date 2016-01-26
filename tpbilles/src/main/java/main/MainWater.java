@@ -28,10 +28,10 @@ import tools.Randomizer;
 
 public class MainWater extends Application {
 
-	private static int largeur = 150;
-	private static int hauteur = 150;
-	private static int nbShark = 20;
-	private static int nbNemo = 2100;
+	private static int largeur = 100;
+	private static int hauteur = 100;
+	private static int nbShark = 80;
+	private static int nbNemo = 600;
 	private static int tempsAttente = 120;
 	private static int tempsArret = 0;
 	private static final int SIZE = 5;
