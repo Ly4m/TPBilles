@@ -21,24 +21,25 @@ import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
+import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import tools.Randomizer;
 
 public class MainWater extends Application {
 
-	private static int largeur = 200;
-	private static int hauteur = 200;
-	private static int nbShark = 1000;
-	private static int nbNemo = 2500;
+	private static int largeur = 100;
+	private static int hauteur = 100;
+	private static int nbShark = 80;
+	private static int nbNemo = 600;
 	private static int tempsAttente = 120;
 	private static int tempsArret = 0;
 	private static final int SIZE = 5;
 	private static long seed = Calendar.getInstance().getTimeInMillis();
 
-	public static List<Circle> circle;
+	public static List<Circle> Circle;
 
-	public static ObservableList<Circle> circleObs;
+	public static ObservableList<Circle> CircleObs;
 	public static Pane canvas;
 
 	public static void main(String[] args) {
@@ -48,9 +49,9 @@ public class MainWater extends Application {
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 
-		circle = new ArrayList<Circle>();
+		Circle = new ArrayList<Circle>();
 
-		circleObs = FXCollections.observableArrayList(circle);
+		CircleObs = FXCollections.observableArrayList(Circle);
 
 		Randomizer.setSeed(seed);
 		final Environnement env = new Environnement(largeur, hauteur);
@@ -58,14 +59,7 @@ public class MainWater extends Application {
 		boolean ok = false;
 
 		canvas = new Pane();
-		final Scene scene = new Scene(canvas, largeur, hauteur);
-
-//		for(int i = SIZE; i < hauteur; i += SIZE ){
-//			canvas.getChildren().addAll(new Line(0, i, largeur, i));
-//		}
-//		for(int i = SIZE; i < largeur; i += SIZE ){
-//			canvas.getChildren().addAll(new Line(i, 0, i, hauteur));
-//		}
+		final Scene scene = new Scene(canvas, largeur * 5, hauteur * 5);
 
 		primaryStage.setTitle("Chase me");
 		primaryStage.setScene(scene);
@@ -86,7 +80,7 @@ public class MainWater extends Application {
 
 					ok = true;
 
-					circleObs.add(shark.getCircle());
+					CircleObs.add(shark.getCircle());
 				} catch (IllegalArgumentException ignore) {
 				}
 			}
@@ -106,14 +100,14 @@ public class MainWater extends Application {
 					sma.addAgent(nemo);
 					ok = true;
 
-					circleObs.add(nemo.getCircle());
+					CircleObs.add(nemo.getCircle());
 				} catch (IllegalArgumentException ignore) {
 				}
 			}
 
 		}
 
-		canvas.getChildren().addAll(circleObs);
+		canvas.getChildren().addAll(CircleObs);
 
 		final long start = Calendar.getInstance().getTimeInMillis();
 		final long stop = tempsArret * 1000;
@@ -121,7 +115,7 @@ public class MainWater extends Application {
 		double tempsTotalRun = 0;
 
 
-		final Timeline loop = new Timeline(new KeyFrame(Duration.millis(33), new EventHandler<ActionEvent>() {
+		final Timeline loop = new Timeline(new KeyFrame(Duration.millis(30), new EventHandler<ActionEvent>() {
 
 			public void handle(final ActionEvent t) {
 

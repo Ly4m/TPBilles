@@ -20,9 +20,7 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 import tools.Randomizer;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.List;
+import java.util.*;
 
 public class Main extends Application {
 
@@ -33,18 +31,18 @@ public class Main extends Application {
     private static int tempsArret = 0;
     private static long seed = Calendar.getInstance().getTimeInMillis();
 
-    public static List<Circle> circle;
+    public static List<Circle> Circle;
 
-    public static ObservableList<Circle> circleObs;
+    public static ObservableList<Circle> CircleObs;
     public static Pane canvas;
 
 
     @Override
     public void start(Stage primaryStage) throws Exception {
 
-        circle = new ArrayList<Circle>();
+        Circle = new ArrayList<Circle>();
 
-        circleObs = FXCollections.observableArrayList(circle);
+        CircleObs = FXCollections.observableArrayList(Circle);
 
         Randomizer.setSeed(seed);
         final Environnement env = new Environnement(largeur, hauteur);
@@ -62,6 +60,7 @@ public class Main extends Application {
             sma.addAgent(new Mur(env, sma, i, 0, Mur.TypeMur.HORIZONTAL));
             sma.addAgent(new Mur(env, sma, i, nbCasesY - 1, Mur.TypeMur.HORIZONTAL));
         }
+
 
 
         canvas = new Pane();
@@ -90,7 +89,7 @@ public class Main extends Application {
                     ok = true;
 
 
-                    circleObs.add(bille.getCircle());
+                    CircleObs.add(bille.getCircle());
                 } catch (IllegalArgumentException ignore) {
                 }
             }
@@ -99,9 +98,9 @@ public class Main extends Application {
         }
 
 
-//        circle.forEach(b -> canvas.getChildren().addAll(b));
+//        Circle.forEach(b -> canvas.getChildren().addAll(b));
 
-    canvas.getChildren().addAll(circleObs);
+    canvas.getChildren().addAll(CircleObs);
 
         final long start = Calendar.getInstance().getTimeInMillis();
         final long stop = tempsArret * 1000;

@@ -1,7 +1,5 @@
 package core.wator;
 
-import java.awt.Graphics;
-
 import core.AgentPhysique;
 import core.Environnement;
 import core.SMA;
@@ -11,21 +9,23 @@ import javafx.scene.shape.Circle;
 import main.MainWater;
 import tools.Randomizer;
 
+import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by leemans on 20/01/16.
  */
 public class Shark extends WaterAgent {
-    final private int LIMITE_SANS_MANGER = 12;
-    final private int TEMPS_AVANT_REPRODUCTION = 18;
+    final private int LIMITE_SANS_MANGER = 3;
+    final private int TEMPS_AVANT_REPRODUCTION = 9;
     private int dernierRepas;
     private int derniereReproduction;
 
     public Shark(Environnement env, SMA sma, int posX, int posY, Directions direction) {
         super(env, sma, posX, posY, direction);
-        this.circle = new Circle(2.5, Color.INDIANRED);
-        this.circle.relocate(posX * 2.5, posY * 2.5);
-        dernierRepas = 0;
-        derniereReproduction = 0;
+        this.Circle = new Circle(2.5, Color.INDIANRED);
+        this.Circle.relocate(posX * 5, posY * 5);
         estMangeable = false;
     }
 
@@ -36,63 +36,63 @@ public class Shark extends WaterAgent {
 
     @Override
     public void decide() {
+        age++;
+        find(environnement.getLocations());
 
-        this.age++;
-        this.starvingCount++;
-
-        int oldY = posY;
-        int oldX = posX;
-
-        if (find(environnement.getLocations())) {
-
-
-
-            if (this.birthCount > TEMPS_AVANT_REPRODUCTION) {
-
-                faireUnBaybay(environnement.getLocations(), oldX, oldY);
-                this.birthCount = 0;
-            } else {
-                this.birthCount++;
-
-            }
-
+        if (this.birthCount++ > TEMPS_AVANT_REPRODUCTION) {
+            faireUnBaybay();
+            this.birthCount = 0;
         }
 
-        if(this.starvingCount > LIMITE_SANS_MANGER){
-            this.meurt(environnement.getLocations());
+        if (this.starvingCount++ > LIMITE_SANS_MANGER) {
+            this.meurt();
         }
-
     }
 
     private boolean find(AgentPhysique[][] locations) {
+        List<WaterAgent> listPrey = new ArrayList<WaterAgent>();
+        int newX = 0;
+        int newY = 0;
 
         // check autour
         for (int y = -1; y <= 1; y++) {
             for (int x = -1; x <= 1; x++) {
 
-                int newX = (posX + x + environnement.getLargeur()) % environnement.getLargeur();
-                int newY = (posY + x + environnement.getHauteur()) % environnement.getHauteur();
+                newY = (posY + y + environnement.getHauteur()) % environnement.getHauteur();
+                newX = (posX + x + environnement.getLargeur()) % environnement.getLargeur();
 
                 AgentPhysique truc = locations[newY][newX];
 
                 if (truc != null && ((WaterAgent) truc).estMangeable) {
-                    ((WaterAgent) truc).getCircle().setFill(new Color(0, 1, 0, 1));
-
-                    ((WaterAgent) truc).meurt(environnement.getLocations());
-
-                    environnement.removeAgent(this);
-
-                    this.posX = newX;
-                    this.posY = newY;
-
-                    environnement.addAgent(this);
-
-                    this.circle.relocate(newX * 2.5, newY * 2.5);
-                    this.starvingCount = 0;
-                    return true;
+                    listPrey.add(((WaterAgent) truc));
                 }
-
             }
+        }
+
+
+        if (!listPrey.isEmpty()) {
+            WaterAgent prey = listPrey.get(Randomizer.randomGenerator.nextInt(listPrey.size()));
+
+            newY = prey.getPosY();
+            newX = prey.getPosX();
+
+            if (newX == this.posX && newY == this.posY) {
+                System.out.println(this.age + " THIS " + locations[this.getPosY()][this.getPosX()]);
+            }
+
+            prey.meurt();
+
+            environnement.removeAgent(this);
+
+            this.posX = newX;
+            this.posY = newY;
+
+            environnement.addAgent(this);
+
+            this.Circle.relocate(newX * 5, newY * 5);
+            this.starvingCount = 0;
+            return true;
+
         }
 
         return randomMove(locations);
@@ -108,34 +108,42 @@ public class Shark extends WaterAgent {
     }
 
     public boolean randomMove(AgentPhysique[][] locations) {
-        final Directions direction = Directions.values()[Randomizer.randomGenerator.nextInt(Directions.values().length - 1) + 1];
+
+        final Directions direction = findRandomEmptyCase();
+
+        if (direction == null) {
+            return false;
+        }
 
         int nextPosX = (posX + direction.getDirX() + environnement.getLargeur()) % environnement.getLargeur();
         int nextPosY = (posY + direction.getDirY() + environnement.getHauteur()) % environnement.getHauteur();
 
         WaterAgent agentPresent = (WaterAgent) locations[nextPosY][nextPosX];
 
-        if (agentPresent == null) {
 
-            locations[posY][posX] = null;
+        environnement.removeAgent(this);
+        posX = nextPosX;
+        posY = nextPosY;
+        environnement.addAgent(this);
 
-            posX = nextPosX;
-            posY = nextPosY;
-
-            locations[posY][posX] = this;
-            this.circle.relocate(posX * 2.5, posY * 2.5);
-            return true;
-        }
-
-        return false;
+        this.Circle.relocate(posX * 5, posY * 5);
+        return true;
     }
 
-    private void faireUnBaybay(AgentPhysique[][] locations, int posX, int posY) {
-        final Directions direction = Directions.values()[Randomizer.randomGenerator.nextInt(Directions.values().length - 1) + 1];
+    private void faireUnBaybay() {
 
-        Shark bebe = new Shark(environnement, sma, posX, posY, direction);
+        Directions dir = findRandomEmptyCase();
+
+        if (dir == null) {
+            return;
+        }
+
+        int nextPosX = (this.posX + dir.getDirX() + environnement.getLargeur()) % environnement.getLargeur();
+        int nextPosY = (this.posY + dir.getDirY() + environnement.getHauteur()) % environnement.getHauteur();
+
+        Shark bebe = new Shark(environnement, sma, nextPosX, nextPosY, direction);
         try {
-           locations[posY][posX] = null;
+
             this.environnement.addAgent(bebe);
             sma.addAgentApres(bebe);
             MainWater.canvas.getChildren().addAll(bebe.getCircle());
