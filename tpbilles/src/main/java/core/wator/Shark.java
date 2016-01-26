@@ -24,8 +24,8 @@ public class Shark extends WaterAgent {
 
     public Shark(Environnement env, SMA sma, int posX, int posY, Directions direction) {
         super(env, sma, posX, posY, direction);
-        this.circle = new Circle(2.5, Color.INDIANRED);
-        this.circle.relocate(posX * 5, posY * 5);
+        this.Circle = new Circle(2.5, Color.INDIANRED);
+        this.Circle.relocate(posX * 5, posY * 5);
         estMangeable = false;
     }
 
@@ -89,7 +89,7 @@ public class Shark extends WaterAgent {
 
             environnement.addAgent(this);
 
-            this.circle.relocate(newX * 5, newY * 5);
+            this.Circle.relocate(newX * 5, newY * 5);
             this.starvingCount = 0;
             return true;
 
@@ -126,7 +126,7 @@ public class Shark extends WaterAgent {
         posY = nextPosY;
         environnement.addAgent(this);
 
-        this.circle.relocate(posX * 5, posY * 5);
+        this.Circle.relocate(posX * 5, posY * 5);
         return true;
     }
 

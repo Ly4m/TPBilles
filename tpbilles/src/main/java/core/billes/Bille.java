@@ -15,7 +15,7 @@ import java.awt.*;
 public class Bille extends AgentBille {
 
     public Circle getCircle() {
-        return this.circle;
+        return this.Circle;
     }
 
 
@@ -33,8 +33,8 @@ public class Bille extends AgentBille {
         int blue = Randomizer.randomGenerator.nextInt(255);
         this.couleur = new Color((float)red/100, (float)green/100, (float)blue/100, 1.0);
 
-        this.circle = new Circle(2.5, couleur);
-        this.circle.relocate(posX / 5, posY / 5);
+        this.Circle = new Circle(2.5, couleur);
+        this.Circle.relocate(posX / 5, posY / 5);
     }
 
     @Override
@@ -70,7 +70,7 @@ public class Bille extends AgentBille {
         posX = nextPosX;
         posY = nextPosY;
         locations[posY][posX] = this;
-        this.circle.relocate(posX, posY);
+        this.Circle.relocate(posX, posY);
 
     }
 }

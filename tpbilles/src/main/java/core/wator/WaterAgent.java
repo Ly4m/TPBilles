@@ -18,11 +18,11 @@ public abstract class WaterAgent extends AgentPhysique {
 
 
     protected boolean agonie;
-    protected Circle circle;
+    protected Circle Circle;
     protected int age, birthCount, starvingCount;
 
-    public void setCircle(Circle circle) {
-        this.circle = circle;
+    public void setCircle(Circle Circle) {
+        this.Circle = Circle;
     }
 
     protected boolean estMangeable;
@@ -33,7 +33,7 @@ public abstract class WaterAgent extends AgentPhysique {
     }
 
     public Circle getCircle() {
-        return circle;
+        return Circle;
     }
 
     public Directions getDirection() {
@@ -43,7 +43,7 @@ public abstract class WaterAgent extends AgentPhysique {
     public abstract Directions estRencontrePar(WaterAgent autre);
 
     public void meurt() {
-        MainWater.canvas.getChildren().remove(this.circle);
+        MainWater.canvas.getChildren().remove(this.Circle);
         environnement.removeAgent(this);
         sma.removeAgentApres(this);
         agonie = true;

@@ -19,8 +19,8 @@ public class Nemo extends WaterAgent {
 
     public Nemo(Environnement env, SMA sma, int posX, int posY, Directions direction) {
         super(env, sma, posX, posY, direction);
-        this.circle = new Circle(2.5, Color.CORNFLOWERBLUE);
-        this.circle.relocate(posX * 5, posY * 5);
+        this.Circle = new Circle(2.5, Color.CORNFLOWERBLUE);
+        this.Circle.relocate(posX * 5, posY * 5);
         estMangeable = true;
     }
 
@@ -50,7 +50,7 @@ public class Nemo extends WaterAgent {
         posX = nextPosX;
         posY = nextPosY;
         environnement.addAgent(this);
-        this.circle.relocate(posX * 5, posY * 5);
+        this.Circle.relocate(posX * 5, posY * 5);
 
         if (this.birthCount++ > TEMPS_AVANT_REPRODUCTION) {
             faireUnBaybay();

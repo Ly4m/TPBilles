@@ -12,7 +12,7 @@ public abstract class AgentBille extends AgentPhysique {
 
     protected Directions direction;
 
-    Circle circle;
+    Circle Circle;
 
     public AgentBille(Environnement env, SMA sma, int posX, int posY, Directions direction) {
         super(env, sma, posX, posY);
@@ -20,7 +20,7 @@ public abstract class AgentBille extends AgentPhysique {
 
     }
 
-    public Circle getCircle() { return this.circle;}
+    public Circle getCircle() { return this.Circle;}
 
     public Directions getDirection() {
         return this.direction;
