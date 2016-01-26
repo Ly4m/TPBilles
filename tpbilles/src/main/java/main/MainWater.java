@@ -29,8 +29,8 @@ public class MainWater extends Application {
 
 	private static int largeur = 150;
 	private static int hauteur = 150;
-	private static int nbShark = 1000;
-	private static int nbNemo = 2000;
+	private static int nbShark = 20;
+	private static int nbNemo = 2100;
 	private static int tempsAttente = 120;
 	private static int tempsArret = 0;
 	private static final int SIZE = 5;
@@ -114,7 +114,7 @@ public class MainWater extends Application {
 		double tempsTotalRun = 0;
 
 
-		final Timeline loop = new Timeline(new KeyFrame(Duration.millis(16), new EventHandler<ActionEvent>() {
+		final Timeline loop = new Timeline(new KeyFrame(Duration.millis(30), new EventHandler<ActionEvent>() {
 
 			public void handle(final ActionEvent t) {
 

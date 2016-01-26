@@ -16,6 +16,8 @@ public abstract class WaterAgent extends AgentPhysique {
 
     protected Directions direction;
 
+
+    protected boolean agonie;
     protected Circle circle;
     protected int age, birthCount, starvingCount;
 
@@ -42,11 +44,9 @@ public abstract class WaterAgent extends AgentPhysique {
 
     public void meurt() {
         MainWater.canvas.getChildren().remove(this.circle);
-
         environnement.removeAgent(this);
-
-
         sma.removeAgentApres(this);
+        agonie = true;
     }
 
     public Directions findRandomEmptyCase() {
@@ -54,7 +54,6 @@ public abstract class WaterAgent extends AgentPhysique {
         List<Directions> listEmpty = new ArrayList<Directions>();
 
         Directions[] directionses = Directions.values();
-
 
         for (int i = 1; i < directionses.length; i++) {
 
@@ -66,13 +65,11 @@ public abstract class WaterAgent extends AgentPhysique {
             }
         }
 
-        if(!listEmpty.isEmpty()){
+        if (!listEmpty.isEmpty()) {
             Collections.shuffle(listEmpty);
             return listEmpty.get(0);
         }
 
         return null;
-
     }
-
 }

@@ -32,36 +32,30 @@ public class Nemo extends WaterAgent {
     @Override
     public void decide() {
 
+        if (this.agonie)
+            return;
+
+        this.age++;
+//        if (this != environnement.getLocations()[this.getPosY()][this.getPosX()])
+//            System.out.println("ERROR Poisson" );
+
         final Directions direction = findRandomEmptyCase();
 
-        int oldX = posX;
-        int oldY = posY;
+        if (direction == null) return;
 
         int nextPosX = (posX + direction.getDirX() + environnement.getLargeur()) % environnement.getLargeur();
         int nextPosY = (posY + direction.getDirY() + environnement.getHauteur()) % environnement.getHauteur();
 
-        AgentPhysique[][] locations = environnement.getLocations();
-        WaterAgent agentPresent = (WaterAgent) locations[nextPosY][nextPosX];
-
-        if (agentPresent != null) {
-            return;
-        }
-
-        locations[posY][posX] = null;
+        environnement.removeAgent(this);
         posX = nextPosX;
         posY = nextPosY;
-        locations[posY][posX] = this;
+        environnement.addAgent(this);
         this.circle.relocate(posX * 5, posY * 5);
 
-        if (this.birthCount > TEMPS_AVANT_REPRODUCTION) {
-
-            faireUnBaybay(environnement.getLocations(), oldX, oldY);
+        if (this.birthCount++ > TEMPS_AVANT_REPRODUCTION) {
+            faireUnBaybay();
             this.birthCount = 0;
-        } else {
-            this.birthCount++;
-
         }
-
     }
 
     @Override
@@ -74,12 +68,12 @@ public class Nemo extends WaterAgent {
     }
 
 
-    private void faireUnBaybay(AgentPhysique[][] locations, int posX, int posY) {
+    private void faireUnBaybay() {
+
         Directions dir = findRandomEmptyCase();
 
-
-        int nextPosX = (posX + dir.getDirX() + environnement.getLargeur()) % environnement.getLargeur();
-        int nextPosY = (posY + dir.getDirY() + environnement.getHauteur()) % environnement.getHauteur();
+        int nextPosX = (this.posX + dir.getDirX() + environnement.getLargeur()) % environnement.getLargeur();
+        int nextPosY = (this.posY + dir.getDirY() + environnement.getHauteur()) % environnement.getHauteur();
 
         Nemo bebe = new Nemo(environnement, sma, nextPosX, nextPosY, direction);
 

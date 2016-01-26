@@ -1,10 +1,6 @@
 package core;
 
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import core.wator.WaterAgent;
 
@@ -33,13 +29,20 @@ public class SMA {
     }
 
     public void run() {
+
+        long start = System.currentTimeMillis();
+
         update();
+
         if (shuffle) {
             Collections.shuffle(agents);
         }
         for (Agent agent : agents) {
             agent.decide();
         }
+
+        System.out.println(System.currentTimeMillis() - start);
+
     }
 
     public Environnement getEnv() {
@@ -85,10 +88,6 @@ public class SMA {
     }
 
     private void removeAgent(Agent agent) {
-        if (agent.isPhysique()) {
-            env.getLocations()[((WaterAgent) agent).posY][((WaterAgent) agent).posX] = null;
-            env.removeAgent((AgentPhysique) agent);
-        }
         this.agents.remove(agent);
     }
 }
