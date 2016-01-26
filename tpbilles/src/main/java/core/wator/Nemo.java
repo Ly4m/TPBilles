@@ -1,15 +1,13 @@
 package core.wator;
 
-import java.awt.Graphics;
-
-import core.AgentPhysique;
 import core.Environnement;
 import core.SMA;
 import core.billes.Directions;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import main.MainWater;
-import tools.Randomizer;
+
+import java.awt.*;
 
 /**
  * Created by leemans & Piorun on 20/01/16.
@@ -31,10 +29,9 @@ public class Nemo extends WaterAgent {
 
     @Override
     public void decide() {
-
-        if (this.agonie)
+        if (this.agonie) {
             return;
-
+        }
         this.age++;
 //        if (this != environnement.getLocations()[this.getPosY()][this.getPosX()])
 //            System.out.println("ERROR Poisson" );
@@ -81,6 +78,7 @@ public class Nemo extends WaterAgent {
             this.environnement.addAgent(bebe);
             sma.addAgentApres(bebe);
             MainWater.canvas.getChildren().addAll(bebe.getCircle());
+            MainWater.nemoCount++;
         } catch (Exception e) {
 //			e.printStackTrace();
         }

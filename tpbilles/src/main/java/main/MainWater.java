@@ -1,13 +1,8 @@
 package main;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.List;
-
 import core.Environnement;
 import core.SMA;
 import core.billes.Directions;
-import core.wator.Mur;
 import core.wator.Nemo;
 import core.wator.Shark;
 import javafx.animation.KeyFrame;
@@ -17,14 +12,19 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.scene.chart.PieChart;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
-import javafx.scene.shape.Circle;
-import javafx.scene.shape.Line;
 import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import tools.Randomizer;
+
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
 
 public class MainWater extends Application {
 
@@ -38,6 +38,10 @@ public class MainWater extends Application {
 	private static long seed = Calendar.getInstance().getTimeInMillis();
 
 	public static List<Circle> Circle;
+
+	public static int nemoCount = nbNemo;
+	public static int sharckCount = nbShark;
+
 
 	public static ObservableList<Circle> CircleObs;
 	public static Pane canvas;
@@ -58,12 +62,13 @@ public class MainWater extends Application {
 		final SMA sma = new SMA(env);
 		boolean ok = false;
 
+		Group root  = new Group();
 		canvas = new Pane();
-		final Scene scene = new Scene(canvas, largeur * 5, hauteur * 5);
+		HBox hbox = new HBox(canvas);
+		root.getChildren().add(hbox);
+		final Scene scene = new Scene(root, largeur * 5, hauteur * 5);
 
 		primaryStage.setTitle("Chase me");
-		primaryStage.setScene(scene);
-		primaryStage.show();
 
 //		 Ajout des requins
 		for (int i = 0; i < nbShark; i++) {
@@ -115,11 +120,30 @@ public class MainWater extends Application {
 		double tempsTotalRun = 0;
 
 
-		final Timeline loop = new Timeline(new KeyFrame(Duration.millis(30), new EventHandler<ActionEvent>() {
+
+
+
+		PieChart.Data sharkData = new PieChart.Data("shark", sharckCount);
+		PieChart.Data nemoData = new PieChart.Data("nemo", nemoCount);
+
+		ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList(sharkData, nemoData);
+		final PieChart chart = new PieChart(pieChartData);
+
+		chart.setTitle("Proportion");
+
+		hbox.getChildren().addAll(chart);
+
+		primaryStage.setScene(scene);
+		primaryStage.show();
+
+
+		final Timeline loop = new Timeline(new KeyFrame(Duration.millis(60), new EventHandler<ActionEvent>() {
 
 			public void handle(final ActionEvent t) {
 
 				sma.run();
+				pieChartData.get(0).setPieValue(sharckCount);
+				pieChartData.get(1).setPieValue(nemoCount);
 
 			}
 		}));

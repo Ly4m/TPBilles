@@ -2,8 +2,6 @@ package core;
 
 import java.util.*;
 
-import core.wator.WaterAgent;
-
 /**
  * Created by William on 19/01/2016.
  */
@@ -30,7 +28,7 @@ public class SMA {
 
     public void run() {
 
-        long start = System.currentTimeMillis();
+//        long start = System.currentTimeMillis();
 
         update();
 
@@ -41,8 +39,16 @@ public class SMA {
             agent.decide();
         }
 
-        System.out.println(System.currentTimeMillis() - start);
+//        System.out.println(System.currentTimeMillis() - start);
 
+    }
+
+    public int count(boolean b){
+        if(b){
+            return 1;
+        } else {
+            return 0;
+        }
     }
 
     public Environnement getEnv() {

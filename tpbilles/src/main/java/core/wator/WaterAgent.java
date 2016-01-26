@@ -8,7 +8,6 @@ import javafx.scene.shape.Circle;
 import main.MainWater;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -32,6 +31,10 @@ public abstract class WaterAgent extends AgentPhysique {
         this.direction = direction;
     }
 
+    public boolean getEstMangeable(){
+        return this.estMangeable;
+    }
+
     public Circle getCircle() {
         return Circle;
     }
@@ -46,7 +49,12 @@ public abstract class WaterAgent extends AgentPhysique {
         MainWater.canvas.getChildren().remove(this.Circle);
         environnement.removeAgent(this);
         sma.removeAgentApres(this);
-        agonie = true;
+        this.agonie = true;
+        if(this instanceof Shark){
+            MainWater.sharckCount--;
+        } else {
+            MainWater.nemoCount--;
+        }
     }
 
     public Directions findRandomEmptyCase() {
