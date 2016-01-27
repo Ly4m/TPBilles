@@ -21,14 +21,14 @@ public class SMA {
     public SMA(Environnement env) {
         super();
         this.env = env;
-        this.agents = new LinkedList<Agent>();
+        this.agents = new ArrayList<Agent>();
         this.agentsASupprimer = new HashSet<Agent>();
         this.agentsAAjouter = new HashSet<Agent>();
     }
 
     public void run() {
 
-//        long start = System.currentTimeMillis();
+        long start = System.currentTimeMillis();
 
         update();
 
@@ -39,7 +39,7 @@ public class SMA {
             agent.decide();
         }
 
-//        System.out.println(System.currentTimeMillis() - start);
+        System.out.println(System.currentTimeMillis() - start + " agenst : "  + agents.size());
 
     }
 

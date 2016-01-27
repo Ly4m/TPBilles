@@ -13,12 +13,14 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Insets;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.chart.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
 import javafx.util.Duration;
@@ -30,13 +32,11 @@ import java.util.List;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class MainWater extends Application {
 
     //KENJI
-    private static final int MAX_DATA_POINTS = 50;
+    private static final int MAX_DATA_POINTS = 200;
     private XYChart.Series sharkSeries;
     private XYChart.Series nemoSeries;
     private int xSeriesData = 0;
@@ -49,9 +49,9 @@ public class MainWater extends Application {
 
 
     //LEGIT
-    private static int largeur = 100;
-    private static int hauteur = 100;
-    private static int nbShark = 80;
+    private static int largeur = 150;
+    private static int hauteur = 175;
+    private static int nbShark = 120;
     private static int nbNemo = 600;
     private static int tempsAttente = 120;
     private static int tempsArret = 0;
@@ -61,7 +61,7 @@ public class MainWater extends Application {
     public static List<Circle> Circle;
 
     public static int nemoCount = nbNemo;
-    public static int sharckCount = nbShark;
+    public static int sharkCount = nbShark;
 
 
     public static ObservableList<Circle> CircleObs;
@@ -80,7 +80,7 @@ public class MainWater extends Application {
 
         Randomizer.setSeed(seed);
         final Environnement env = new Environnement(largeur, hauteur);
-        final SMA sma = new SMA(env);
+        final SMA sma = new SMA(env);                                       
         boolean ok = false;
 
         Group root = new Group();
@@ -88,6 +88,7 @@ public class MainWater extends Application {
         HBox hbox = new HBox(canvas);
         root.getChildren().add(hbox);
         final Scene scene = new Scene(root, largeur * 5, hauteur * 5);
+
 
         primaryStage.setTitle("Chase me");
 
@@ -141,17 +142,18 @@ public class MainWater extends Application {
         double tempsTotalRun = 0;
 
 
-        PieChart.Data sharkData = new PieChart.Data("shark", sharckCount);
+        PieChart.Data sharkData = new PieChart.Data("shark", sharkCount);
         PieChart.Data nemoData = new PieChart.Data("nemo", nemoCount);
 
-        ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList(sharkData, nemoData);
+        final ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList(sharkData, nemoData);
         final PieChart chart = new PieChart(pieChartData);
 
         chart.setTitle("Proportion");
         VBox vbox = new VBox(chart);
+
         hbox.getChildren().addAll(vbox);
 
-//KENJI
+        //KENJI
         xAxis = new NumberAxis(0, MAX_DATA_POINTS, MAX_DATA_POINTS / 10);
         xAxis.setForceZeroInRange(false);
         xAxis.setAutoRanging(false);
@@ -168,7 +170,7 @@ public class MainWater extends Application {
         };
         sc.setAnimated(false);
         sc.setId("PopulationChart");
-        sc.setTitle("Poululation chart");
+        sc.setTitle("Popululation chart");
 
         // -- Chart Series
         sharkSeries = new AreaChart.Series<Number, Number>();
@@ -179,7 +181,7 @@ public class MainWater extends Application {
         nemoSeries.setName("Nemo");
         sc.getData().add(nemoSeries);
 
-        vbox.getChildren().addAll(sc);
+        hbox.getChildren().addAll(sc);
 
 
 
@@ -199,7 +201,7 @@ public class MainWater extends Application {
             public void handle(final ActionEvent t) {
 
                 sma.run();
-                pieChartData.get(0).setPieValue(sharckCount);
+                pieChartData.get(0).setPieValue(sharkCount);
                 pieChartData.get(1).setPieValue(nemoCount);
 
             }
@@ -213,12 +215,11 @@ public class MainWater extends Application {
         public void run() {
             try {
                 // add a item of random data to queue
-                sharkDataQ.add(sharckCount);
+                sharkDataQ.add(sharkCount);
                 nemoDataQ.add(nemoCount);
-                Thread.sleep(50);
+                Thread.sleep(60);
                 executor.execute(this);
             } catch (InterruptedException ex) {
-                Logger.getLogger(AreaChartSample.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }

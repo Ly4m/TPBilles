@@ -51,7 +51,7 @@ public abstract class WaterAgent extends AgentPhysique {
         sma.removeAgentApres(this);
         this.agonie = true;
         if(this instanceof Shark){
-            MainWater.sharckCount--;
+            MainWater.sharkCount--;
         } else {
             MainWater.nemoCount--;
         }

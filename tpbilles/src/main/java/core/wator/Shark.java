@@ -147,7 +147,7 @@ public class Shark extends WaterAgent {
             this.environnement.addAgent(bebe);
             sma.addAgentApres(bebe);
             MainWater.canvas.getChildren().addAll(bebe.getCircle());
-            MainWater.sharckCount++;
+            MainWater.sharkCount++;
         } catch (Exception e) {
             e.printStackTrace();
         }

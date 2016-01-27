@@ -13,7 +13,7 @@ import java.awt.*;
  * Created by leemans & Piorun on 20/01/16.
  */
 public class Nemo extends WaterAgent {
-    final private int TEMPS_AVANT_REPRODUCTION = 2;
+    final private int TEMPS_AVANT_REPRODUCTION = 3;
 
     public Nemo(Environnement env, SMA sma, int posX, int posY, Directions direction) {
         super(env, sma, posX, posY, direction);

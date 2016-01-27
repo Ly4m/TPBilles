@@ -59,6 +59,7 @@ public class Bille extends AgentBille {
         int nextPosX = posX + direction.getDirX();
         int nextPosY = posY + direction.getDirY();
         AgentPhysique[][] locations = environnement.getLocations();
+
         AgentBille agentPresent = (AgentBille) locations[nextPosY][nextPosX];
         if (agentPresent != null) {
             this.direction = agentPresent.estRencontrePar(this);
