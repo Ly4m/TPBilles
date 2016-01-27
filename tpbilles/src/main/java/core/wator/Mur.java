@@ -5,7 +5,7 @@ import java.awt.Graphics;
 
 import core.Environnement;
 import core.SMA;
-import core.billes.Directions;
+import core.Directions;
 
 public class Mur extends WaterAgent {
 
@@ -39,11 +39,6 @@ public class Mur extends WaterAgent {
 		// Stand still
 	}
 
-	@Override
-	public void dessine(Graphics g) {
-		g.setColor(Color.BLACK);
-		g.fillRect(posX * taille, posY * taille, taille, taille);
-	}
 
 	@Override
 	public Directions estRencontrePar(WaterAgent autre) {

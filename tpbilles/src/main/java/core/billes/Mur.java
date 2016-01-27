@@ -1,5 +1,6 @@
 package core.billes;
 
+import core.Directions;
 import core.Environnement;
 import core.SMA;
 
@@ -36,11 +37,7 @@ public class Mur extends AgentBille {
 		// Stand still
 	}
 
-	@Override
-	public void dessine(Graphics g) {
-		g.setColor(Color.BLACK);
-		g.fillRect(posX * taille, posY * taille, taille, taille);
-	}
+
 
 	@Override
 	public Directions estRencontrePar(AgentBille autre) {

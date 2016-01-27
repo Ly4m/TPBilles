@@ -3,13 +3,12 @@ package core.wator;
 import core.AgentPhysique;
 import core.Environnement;
 import core.SMA;
-import core.billes.Directions;
+import core.Directions;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import main.MainWater;
 import tools.Randomizer;
 
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,11 +26,6 @@ public class Shark extends WaterAgent {
         this.Circle = new Circle(2.5, Color.INDIANRED);
         this.Circle.relocate(posX * 5, posY * 5);
         estMangeable = false;
-    }
-
-    @Override
-    public void dessine(Graphics g) {
-
     }
 
     @Override

@@ -1,6 +1,7 @@
 package core.billes;
 
 import core.AgentPhysique;
+import core.Directions;
 import core.Environnement;
 import core.SMA;
 import javafx.scene.paint.Color;
@@ -46,9 +47,6 @@ public class Bille extends AgentBille {
         return oldDirection.getOpposeX().getOpposeY();
     }
 
-    @Override
-    public void dessine(Graphics g) {
-    }
 
     public javafx.scene.paint.Color getCouleur() {
         return this.couleur;

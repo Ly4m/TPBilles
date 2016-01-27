@@ -42,5 +42,4 @@ public abstract class AgentPhysique extends Agent {
 		return true;
 	}
 	
-	public abstract void dessine(Graphics g);
 }

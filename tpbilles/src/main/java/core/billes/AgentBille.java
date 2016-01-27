@@ -1,6 +1,7 @@
 package core.billes;
 
 import core.AgentPhysique;
+import core.Directions;
 import core.Environnement;
 import core.SMA;
 import javafx.scene.shape.Circle;

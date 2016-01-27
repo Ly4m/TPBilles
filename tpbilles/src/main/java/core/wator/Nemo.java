@@ -2,12 +2,10 @@ package core.wator;
 
 import core.Environnement;
 import core.SMA;
-import core.billes.Directions;
+import core.Directions;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import main.MainWater;
-
-import java.awt.*;
 
 /**
  * Created by leemans & Piorun on 20/01/16.
@@ -22,10 +20,6 @@ public class Nemo extends WaterAgent {
         estMangeable = true;
     }
 
-    @Override
-    public void dessine(Graphics g) {
-
-    }
 
     @Override
     public void decide() {

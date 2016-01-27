@@ -3,7 +3,7 @@ package core.wator;
 import core.AgentPhysique;
 import core.Environnement;
 import core.SMA;
-import core.billes.Directions;
+import core.Directions;
 import javafx.scene.shape.Circle;
 import main.MainWater;
 

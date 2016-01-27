@@ -1,4 +1,4 @@
-package core.billes;
+package core;
 
 public enum Directions {
 	IMMOBILE(0,0),

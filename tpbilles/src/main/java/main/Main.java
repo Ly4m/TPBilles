@@ -4,7 +4,7 @@ import core.AgentPhysique;
 import core.Environnement;
 import core.SMA;
 import core.billes.Bille;
-import core.billes.Directions;
+import core.Directions;
 import core.billes.Mur;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
