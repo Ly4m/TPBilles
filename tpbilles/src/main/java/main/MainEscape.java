@@ -1,10 +1,14 @@
 package main;
 
+import java.util.ArrayList;
+import java.util.Calendar;
+
 import core.Directions;
 import core.Environnement;
 import core.SMA;
-import core.billes.Bille;
 import core.escape.MurAgent;
+import core.escape.PlayerAgent;
+import core.escape.ZombieAgent;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
@@ -14,119 +18,140 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
-import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import tools.Randomizer;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.List;
-import java.util.Random;
-
 /**
  * Created by leemans on 27/01/16.
  */
 public class MainEscape extends Application {
 
-    // Environment fields
+	// Environment fields
 
-    private static int largeur = 175;
-    private static int hauteur = 100;
-    private static int nbAgents = 500;
-    private static int tempsAttente = 120;
-    private static int tempsArret = 0;
-    private static int pourcentageMur = 20;
-    private static long seed = Calendar.getInstance().getTimeInMillis();
+	private static int largeur = 175;
+	private static int hauteur = 100;
+	private static int nbHunter = 4;
+	private static int tempsAttente = 120;
+	private static int tempsArret = 0;
+	private static int pourcentageMur = 20;
+	private static long seed = Calendar.getInstance().getTimeInMillis();
 
-    // Escape fields
-    public static Directions direction = Directions.IMMOBILE;
+	// Escape fields
+	public static Directions direction = Directions.IMMOBILE;
 
-    public static ArrayList<Rectangle> murs;
-    public static ObservableList<Rectangle> mursObs;
-    public static ObservableList<Circle> units;
+	public static ArrayList<Rectangle> murs;
+	public static ObservableList<Rectangle> mursObs;
+	public static ObservableList<Circle> units;
 
-    public static Pane canvas;
+	public static Pane canvas;
 
+	@Override
+	public void start(Stage primaryStage) throws Exception {
 
-    @Override
-    public void start(Stage primaryStage) throws Exception {
+		// units = new FXCollections.observableArrayList(units);
+		murs = new ArrayList<Rectangle>();
+		mursObs = FXCollections.observableArrayList(murs);
 
-//        units = new FXCollections.observableArrayList(units);
-        murs = new ArrayList<Rectangle>();
-        mursObs = FXCollections.observableArrayList(murs);
+		canvas = new Pane();
 
-        canvas = new Pane();
+		Randomizer.setSeed(seed);
+		final Environnement environnement = new Environnement(largeur, hauteur);
+		final SMA sma = new SMA(environnement);
 
+		int wallToAdd = hauteur * largeur * pourcentageMur / 100;
 
-        Randomizer.setSeed(seed);
-        final Environnement environnement = new Environnement(largeur, hauteur);
-        final SMA sma = new SMA(environnement);
+		// Ajout des murs extérieurs
+		final int nbCasesY = hauteur;
+		final int nbCasesX = largeur;
+		for (int i = 0; i < nbCasesY; i++) {
+			System.out.println("i : " + i);
+			sma.addAgent((new MurAgent(environnement, sma, 0, i)));
+			sma.addAgent((new MurAgent(environnement, sma, nbCasesX - 1, i)));
+		}
+		for (int i = 1; i < nbCasesX - 1; i++) {
+			sma.addAgent(new MurAgent(environnement, sma, i, 0));
+			sma.addAgent(new MurAgent(environnement, sma, i, nbCasesY - 1));
+		}
 
-        int wallToAdd = hauteur*largeur*20/100;
+		// Ajout des murs intérieurs
+		boolean ok = false;
+		for (int i = 0; i < wallToAdd; i++) {
+			ok = false;
+			while (!ok) {
+				try {
+					final int posX = Randomizer.randomGenerator.nextInt(environnement.getLocations()[0].length);
+					final int posY = Randomizer.randomGenerator.nextInt(environnement.getLocations().length);
 
-        //Ajout des murs
-        final int nbCasesY = hauteur;
-        final int nbCasesX = largeur;
-        for (int i = 0; i < nbCasesY; i++) {
-            System.out.println("i : "+i);
-            sma.addAgent((new MurAgent(environnement, sma, 0, i)));
-            sma.addAgent((new MurAgent(environnement, sma, nbCasesX - 1, i)));
-        }
-        for (int i = 1; i < nbCasesX - 1; i++) {
-            sma.addAgent(new MurAgent(environnement, sma, i, 0));
-            sma.addAgent(new MurAgent(environnement, sma, i, nbCasesY - 1));
-        }
+					MurAgent mur = new MurAgent(environnement, sma, posX, posY);
+					sma.addAgent(mur);
 
-        boolean ok = false;
-        for(int i =0; i<wallToAdd; i++){
-            ok = false;
-            Color couleur = Color.CORNFLOWERBLUE;
-            while (!ok) {
-                try {
-                    final int posX = Randomizer.randomGenerator.nextInt(environnement.getLocations()[0].length);
-                    final int posY = Randomizer.randomGenerator.nextInt(environnement.getLocations().length);
-                    final Directions direction = Directions.values()[Randomizer.randomGenerator
-                            .nextInt(Directions.values().length - 1) + 1];
+					ok = true;
 
-//                    Bille bille = new Bille(environnement, sma, posX, posY, direction);
-//                    sma.addAgent(bille);
+				} catch (IllegalArgumentException ignore) {
+				}
+			}
 
-                    ok = true;
+		}
 
+		// Ajout des chasseurs
+		for (int i = 0; i < nbHunter; i++) {
+			ok = false;
+			while (!ok) {
+				try {
+					final int posX = Randomizer.randomGenerator.nextInt(environnement.getLocations()[0].length);
+					final int posY = Randomizer.randomGenerator.nextInt(environnement.getLocations().length);
 
-//                    mursObs.add(bille.getCircle());
-                } catch (IllegalArgumentException ignore) {
-                }
-            }
+					ZombieAgent hunter = new ZombieAgent(environnement, sma, posX, posY);
+					sma.addAgent(hunter);
 
-        }
+					ok = true;
 
-        final Scene scene = new Scene(canvas, largeur * 5, hauteur * 5);
-        canvas.getChildren().addAll(mursObs);
+				} catch (IllegalArgumentException ignore) {
+				}
+			}
 
-        primaryStage.setTitle("Catch me bitch(es) !");
-        primaryStage.setScene(scene);
-        primaryStage.show();
+		}
 
+		// Ajout du joueur
+		ok = false;
+		while (!ok) {
+			try {
+				final int posX = Randomizer.randomGenerator.nextInt(environnement.getLocations()[0].length);
+				final int posY = Randomizer.randomGenerator.nextInt(environnement.getLocations().length);
 
-        final Timeline loop = new Timeline(new KeyFrame(Duration.millis(5), new EventHandler<ActionEvent>() {
-            public void handle(final ActionEvent t) {
-                sma.run();
-            }
-        }));
+				PlayerAgent hunter = new PlayerAgent(environnement, sma, posX, posY);
+				sma.addAgent(hunter);
 
-        loop.setCycleCount(Timeline.INDEFINITE);
-        loop.play();
-    }
+				ok = true;
 
-    public static void main(String[] args) {
+			} catch (IllegalArgumentException ignore) {
+			}
+		}
 
-        launch(args);
+		final Scene scene = new Scene(canvas, largeur * 5, hauteur * 5);
+		canvas.getChildren().addAll(mursObs);
 
+		primaryStage.setTitle("Catch me bitch(es) !");
+		primaryStage.setScene(scene);
+		primaryStage.show();
 
-    }
+		final Timeline loop = new Timeline(new KeyFrame(Duration.millis(5), new EventHandler<ActionEvent>() {
+			public void handle(final ActionEvent t) {
+				sma.run();
+			}
+		}));
+
+		loop.setCycleCount(Timeline.INDEFINITE);
+		loop.play();
+	}
+
+	public static void main(String[] args) {
+
+		launch(args);
+
+	}
 
 }
