@@ -4,7 +4,6 @@ import core.AgentPhysique;
 import core.Directions;
 import core.Environnement;
 import core.SMA;
-import core.billes.AgentBille;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import main.MainEscape;
@@ -28,29 +27,31 @@ public class PlayerAgent extends AgentPhysique {
 	public Rectangle getRectangle() {
 		return rectangle;
 	}
-	
-	public void setDirection(Directions direction){
-		this.direction = direction;
+
+	public void setDirection(Directions dir) {
+		this.direction = dir;
+	}
+
+	public Directions getDirection() {
+		return direction;
 	}
 
 	@Override
 	public void decide() {
-		System.out.println("je décide");
-		 int nextPosX = posX + direction.getDirX();
-	        int nextPosY = posY + direction.getDirY();
-	        AgentPhysique[][] locations = environnement.getLocations();
+		// System.out.println("Direction : " + direction);
+		int nextPosX = posX + direction.getDirX();
+		int nextPosY = posY + direction.getDirY();
+		AgentPhysique[][] locations = environnement.getLocations();
 
-	        if (locations[nextPosY][nextPosX] != null) {
-	            this.direction = Directions.IMMOBILE;
-	            return;
-	        }
+		if (locations[nextPosY][nextPosX] != null) {
+			this.direction = Directions.IMMOBILE;
+			return;
+		}
 
-
-	        locations[posY][posX] = null;
-	        posX = nextPosX;
-	        posY = nextPosY;
-	        locations[posY][posX] = this;
-	        this.getRectangle().relocate(posX, posY);
+		posX = nextPosX;
+		posY = nextPosY;
+		locations[posY][posX] = this;
+		this.getRectangle().relocate(posX, posY);
 	}
 
 }

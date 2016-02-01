@@ -17,7 +17,6 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
-import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Circle;
@@ -38,7 +37,7 @@ public class MainEscape extends Application {
 	private static int nbHunter = 4;
 	private static int tempsAttente = 120;
 	private static int tempsArret = 0;
-	private static int pourcentageMur = 20;
+	private static int pourcentageMur = 10;
 	private static long seed = Calendar.getInstance().getTimeInMillis();
 
 	// Escape fields
@@ -47,7 +46,7 @@ public class MainEscape extends Application {
 	public static ArrayList<Rectangle> murs;
 	public static ObservableList<Rectangle> mursObs;
 	public static ObservableList<Circle> units;
-	
+
 	public static PlayerAgent playerAgent;
 
 	public static Pane canvas;
@@ -138,15 +137,17 @@ public class MainEscape extends Application {
 		final Scene scene = new Scene(canvas, largeur * 5, hauteur * 5);
 		canvas.getChildren().addAll(mursObs);
 
-		scene.setOnKeyPressed(new EventHandler<KeyEvent>(){
+		scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
 
 			public void handle(KeyEvent event) {
-				System.out.println("TOUCHE APPUYEE");
+				System.out.println("direction de l'agent : " + playerAgent.getDirection());
 				switch (event.getCode()) {
 				case UP:
+					System.out.println("UP");
 					playerAgent.setDirection(Directions.HAUT);
 					break;
 				case DOWN:
+					System.out.println("BAS");
 					playerAgent.setDirection(Directions.BAS);
 				case LEFT:
 					playerAgent.setDirection(Directions.GAUCHE);
