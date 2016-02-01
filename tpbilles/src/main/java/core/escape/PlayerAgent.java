@@ -39,11 +39,14 @@ public class PlayerAgent extends AgentPhysique {
 	@Override
 	public void decide() {
 		// System.out.println("Direction : " + direction);
+		System.out.println("next pos x : "+posX +" + "+direction.getDirX());
+		System.out.println("next pos y : "+posY +" + "+direction.getDirY());
 		int nextPosX = posX + direction.getDirX();
 		int nextPosY = posY + direction.getDirY();
 		AgentPhysique[][] locations = environnement.getLocations();
 
 		if (locations[nextPosY][nextPosX] != null) {
+			System.out.println(locations[nextPosY][nextPosX]);
 			this.direction = Directions.IMMOBILE;
 			return;
 		}
@@ -51,7 +54,7 @@ public class PlayerAgent extends AgentPhysique {
 		posX = nextPosX;
 		posY = nextPosY;
 		locations[posY][posX] = this;
-		this.getRectangle().relocate(posX, posY);
+		this.getRectangle().relocate(posX *5, posY *5);
 	}
 
 }

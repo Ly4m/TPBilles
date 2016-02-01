@@ -37,7 +37,7 @@ public class MainEscape extends Application {
 	private static int nbHunter = 4;
 	private static int tempsAttente = 120;
 	private static int tempsArret = 0;
-	private static int pourcentageMur = 10;
+	private static int pourcentageMur = 0;
 	private static long seed = Calendar.getInstance().getTimeInMillis();
 
 	// Escape fields
@@ -50,6 +50,7 @@ public class MainEscape extends Application {
 	public static PlayerAgent playerAgent;
 
 	public static Pane canvas;
+	public static int[][] dijkstra;
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
@@ -65,6 +66,7 @@ public class MainEscape extends Application {
 		final SMA sma = new SMA(environnement);
 
 		int wallToAdd = hauteur * largeur * pourcentageMur / 100;
+		dijkstra = new int[largeur][hauteur];
 
 		// Ajout des murs extérieurs
 		final int nbCasesY = hauteur;
@@ -159,6 +161,8 @@ public class MainEscape extends Application {
 			}
 
 		});
+		
+		dijkstraInit();
 		primaryStage.setTitle("Catch me bitch(es) !");
 		primaryStage.setScene(scene);
 		primaryStage.show();
@@ -171,6 +175,15 @@ public class MainEscape extends Application {
 
 		loop.setCycleCount(Timeline.INDEFINITE);
 		loop.play();
+	}
+
+	private void dijkstraInit() {
+		//init du tableau de valeur
+		for(int i=0; i<largeur; i++){
+			for(int j=0; j<hauteur; i++){
+				dijkstra[i][j] = -1	;
+			}
+		}		
 	}
 
 	public static void main(String[] args) {
