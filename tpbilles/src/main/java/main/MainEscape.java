@@ -17,6 +17,8 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
@@ -45,6 +47,8 @@ public class MainEscape extends Application {
 	public static ArrayList<Rectangle> murs;
 	public static ObservableList<Rectangle> mursObs;
 	public static ObservableList<Circle> units;
+	
+	public static PlayerAgent playerAgent;
 
 	public static Pane canvas;
 
@@ -122,8 +126,8 @@ public class MainEscape extends Application {
 				final int posX = Randomizer.randomGenerator.nextInt(environnement.getLocations()[0].length);
 				final int posY = Randomizer.randomGenerator.nextInt(environnement.getLocations().length);
 
-				PlayerAgent hunter = new PlayerAgent(environnement, sma, posX, posY);
-				sma.addAgent(hunter);
+				playerAgent = new PlayerAgent(environnement, sma, posX, posY);
+				sma.addAgent(playerAgent);
 
 				ok = true;
 
@@ -134,6 +138,26 @@ public class MainEscape extends Application {
 		final Scene scene = new Scene(canvas, largeur * 5, hauteur * 5);
 		canvas.getChildren().addAll(mursObs);
 
+		scene.setOnKeyPressed(new EventHandler<KeyEvent>(){
+
+			public void handle(KeyEvent event) {
+				System.out.println("TOUCHE APPUYEE");
+				switch (event.getCode()) {
+				case UP:
+					playerAgent.setDirection(Directions.HAUT);
+					break;
+				case DOWN:
+					playerAgent.setDirection(Directions.BAS);
+				case LEFT:
+					playerAgent.setDirection(Directions.GAUCHE);
+				case RIGHT:
+					playerAgent.setDirection(Directions.DROITE);
+				default:
+					break;
+				}
+			}
+
+		});
 		primaryStage.setTitle("Catch me bitch(es) !");
 		primaryStage.setScene(scene);
 		primaryStage.show();

@@ -39,7 +39,7 @@ public class SMA {
             agent.decide();
         }
 
-        System.out.println(System.currentTimeMillis() - start + " agenst : "  + agents.size());
+//        System.out.println(System.currentTimeMillis() - start + " agenst : "  + agents.size());
 
     }
 
