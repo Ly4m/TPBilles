@@ -32,12 +32,12 @@ public class MainEscape extends Application {
 
 	// Environment fields
 
-	private static int largeur = 100;
-	private static int hauteur = 100;
-	private static int nbHunter = 3;
+	private static int largeur = 10;
+	private static int hauteur = 10;
+	private static int nbHunter = 5;
 	private static int tempsAttente = 120;
 	private static int tempsArret = 0;
-	private static int pourcentageMur = 15;
+	private static int pourcentageMur = 0;
 	private static long seed = Calendar.getInstance().getTimeInMillis();
 
 	// Escape fields
@@ -68,7 +68,7 @@ public class MainEscape extends Application {
 
 		int wallToAdd = hauteur * largeur * pourcentageMur / 100;
 
-		// Ajout des murs ext�rieurs
+		// Ajout des murs extérieurs
 		final int nbCasesY = hauteur;
 		final int nbCasesX = largeur;
 		for (int i = 0; i < nbCasesY; i++) {
@@ -114,6 +114,9 @@ public class MainEscape extends Application {
 					if (environnement.getLocations()[posY][posX] == null) {
 						sma.addAgent(hunter);
 						ok = true;
+					} else {
+						canvas.getChildren().removeAll(hunter.getRectangle());
+
 					}
 				} catch (IllegalArgumentException ignore) {
 					System.out.println("Error");
@@ -135,6 +138,7 @@ public class MainEscape extends Application {
 				ok = true;
 
 			} catch (IllegalArgumentException ignore) {
+				canvas.getChildren().removeAll(playerAgent.getRectangle());
 			}
 		}
 
