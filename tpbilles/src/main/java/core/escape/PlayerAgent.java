@@ -61,7 +61,7 @@ public class PlayerAgent extends AgentPhysique {
 		posY = nextPosY;
 		locations[posY][posX] = this;
 		this.getRectangle().relocate(posX *5, posY *5);
-		MainEscape.dijkstra.compute();
+		MainEscape.dijkstra.dijkstra();
 
 	}
 
