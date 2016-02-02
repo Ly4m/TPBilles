@@ -47,11 +47,11 @@ public class ZombieAgent extends AgentPhysique {
         Position pos = new Position(this.posX, this.posY);
 
         for (int i = -1; i <= 1; i++) {
-            for (int j = -1; j < 1; j++) {
-                int value = MainEscape.dijkstra.grille[this.posX + i][this.posY + j];
+            for (int j = -1; j <= 1; j++) {
+                int value = MainEscape.dijkstra.grille[this.posY + i][this.posX + j];
                 if(value > 0 && value < min){
                     min = value;
-                    pos = new Position(this.posX + i, this.posY);
+                    pos = new Position(this.posX + j, this.posY + i);
                 }
             }
         }

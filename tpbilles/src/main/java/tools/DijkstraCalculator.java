@@ -1,13 +1,13 @@
 package tools;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-
 import core.Environnement;
 import core.escape.MurAgent;
 import javafx.scene.shape.Rectangle;
 import main.MainEscape;
+
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Created by willl on 02/02/2016.
@@ -96,12 +96,8 @@ public class DijkstraCalculator {
 				// rekt.add(rectangle);
 				// MainEscape.canvas.getChildren().addAll(rectangle);
 
-				System.out.print("\t," + grille[y][x] + " , ");
-
 			}
-			System.out.println("");
 		}
-		System.out.println("==================================================");
 	}
 
 	private void dijkstraInit() {
