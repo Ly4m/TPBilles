@@ -142,19 +142,19 @@ public class MainEscape extends Application {
 		scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
 
 			public void handle(KeyEvent event) {
-				System.out.println("direction de l'agent : " + playerAgent.getDirection());
 				switch (event.getCode()) {
 				case UP:
-					System.out.println("UP");
 					playerAgent.setDirection(Directions.HAUT);
 					break;
 				case DOWN:
-					System.out.println("BAS");
 					playerAgent.setDirection(Directions.BAS);
+					break;
 				case LEFT:
 					playerAgent.setDirection(Directions.GAUCHE);
+					break;
 				case RIGHT:
 					playerAgent.setDirection(Directions.DROITE);
+					break;
 				default:
 					break;
 				}
@@ -180,7 +180,7 @@ public class MainEscape extends Application {
 	private void dijkstraInit() {
 		//init du tableau de valeur
 		for(int i=0; i<largeur; i++){
-			for(int j=0; j<hauteur; i++){
+			for(int j=0; j<hauteur; j++){
 				dijkstra[i][j] = -1	;
 			}
 		}		

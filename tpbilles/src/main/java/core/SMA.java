@@ -2,6 +2,8 @@ package core;
 
 import java.util.*;
 
+import main.MainEscape;
+
 /**
  * Created by William on 19/01/2016.
  */
@@ -31,7 +33,17 @@ public class SMA {
         long start = System.currentTimeMillis();
 
         update();
-
+        
+        int agentX = MainEscape.playerAgent.posX;
+        int agentY = MainEscape.playerAgent.posY ;
+        
+        MainEscape.dijkstra[MainEscape.playerAgent.posX][MainEscape.playerAgent.posY] = 0;
+        for(int i = -1; i <= 1; i++){
+        	for(int j = -1; j<1 ; j++){
+        		//EN COURS
+        	}
+        }
+        
         if (shuffle) {
             Collections.shuffle(agents);
         }
