@@ -49,7 +49,7 @@ public class ZombieAgent extends AgentPhysique {
         for (int i = -1; i <= 1; i++) {
             for (int j = -1; j <= 1; j++) {
                 int value = MainEscape.dijkstra.grille[this.posY + i][this.posX + j];
-                if(value > 0 && value < min){
+                if(value > 0 && value < min && environnement.getLocations()[this.posY + i][this.posX + j] == null){
                     min = value;
                     pos = new Position(this.posX + j, this.posY + i);
                 }

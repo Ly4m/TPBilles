@@ -1,8 +1,5 @@
 package main;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-
 import core.Directions;
 import core.Environnement;
 import core.SMA;
@@ -25,6 +22,9 @@ import javafx.util.Duration;
 import tools.DijkstraCalculator;
 import tools.Randomizer;
 
+import java.util.ArrayList;
+import java.util.Calendar;
+
 /**
  * Created by leemans on 27/01/16.
  */
@@ -34,7 +34,7 @@ public class MainEscape extends Application {
 
 	private static int largeur = 100;
 	private static int hauteur = 100;
-	private static int nbHunter = 1;
+	private static int nbHunter = 3;
 	private static int tempsAttente = 120;
 	private static int tempsArret = 0;
 	private static int pourcentageMur = 15;
