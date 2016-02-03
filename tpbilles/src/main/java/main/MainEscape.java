@@ -1,5 +1,8 @@
 package main;
 
+import java.util.ArrayList;
+import java.util.Calendar;
+
 import core.Directions;
 import core.Environnement;
 import core.SMA;
@@ -22,22 +25,33 @@ import javafx.util.Duration;
 import tools.DijkstraCalculator;
 import tools.Randomizer;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-
 /**
  * Created by leemans on 27/01/16.
  */
 public class MainEscape extends Application {
+	/*
+	 * figer le jeu quand on est attrappé
+	 * 
+	 * vitesses variables
+	 * 
+	 * rapport :
+	 * 
+	 * Un UML général sur notre projet global
+	 * 
+	 * 3 partie => une par TP avec pour chaque le graph UML correspondant +
+	 * expliqation sur lancement et organisation
+	 * 
+	 * 
+	 */
 
 	// Environment fields
 
-	private static int largeur = 10;
-	private static int hauteur = 10;
+	private static int largeur = 130;
+	private static int hauteur = 130;
 	private static int nbHunter = 5;
 	private static int tempsAttente = 120;
 	private static int tempsArret = 0;
-	private static int pourcentageMur = 0;
+	private static int pourcentageMur = 5;
 	private static long seed = Calendar.getInstance().getTimeInMillis();
 
 	// Escape fields

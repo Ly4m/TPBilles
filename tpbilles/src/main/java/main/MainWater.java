@@ -7,6 +7,13 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import org.apache.commons.cli.CommandLine;
+import org.apache.commons.cli.CommandLineParser;
+import org.apache.commons.cli.DefaultParser;
+import org.apache.commons.cli.HelpFormatter;
+import org.apache.commons.cli.Options;
+import org.apache.commons.cli.ParseException;
+
 import core.Directions;
 import core.Environnement;
 import core.SMA;
@@ -37,7 +44,8 @@ import tools.Randomizer;
 
 public class MainWater extends Application {
 
-	// KENJI
+	static Options options = new Options();
+
 	private static final int MAX_DATA_POINTS = 200;
 	private XYChart.Series sharkSeries;
 	private XYChart.Series nemoSeries;
@@ -54,6 +62,9 @@ public class MainWater extends Application {
 	private static int hauteur = 175;
 	private static int nbShark = 120;
 	private static int nbNemo = 600;
+	private static int survieShark = 3;
+	private static int reproductionShark = 9;
+	private static int reproductionNemo = 2;
 	private static int tempsAttente = 120;
 	private static int tempsArret = 0;
 	private static final int SIZE = 5;
@@ -67,7 +78,52 @@ public class MainWater extends Application {
 	public static ObservableList<Circle> CircleObs;
 	public static Pane canvas;
 
+	public static String NB_SHARK = "nbShark";
+	public static String NB_NEMO = "nbNemo";
+	public static String SURVIE_SHARK = "survieShark";
+	public static String REPRODUCTION_SHARK = "reproductionShark";
+	public static String REPRODUCTION_NEMO = "reproductionNemo";
+
 	public static void main(String[] args) {
+
+		// gère les arguments
+		options.addOption(NB_SHARK, false, "nombre de requin au départ");
+		options.addOption(NB_NEMO, false, "nombre de poissons au départ");
+		options.addOption(SURVIE_SHARK, false, "nombre de tours durant lesquels un requin survis sans manger");
+		options.addOption(REPRODUCTION_SHARK, false, "nombre de tours avant la reproduction des requins");
+		options.addOption(REPRODUCTION_NEMO, false, "nombre de tours avant la reproduction des poissons");
+
+		HelpFormatter formatter = new HelpFormatter();
+		formatter.printHelp("Wator", options);
+
+		CommandLineParser parser = new DefaultParser();
+		CommandLine cmd = null;
+		try {
+			cmd = parser.parse(options, args);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+
+		if (cmd.hasOption(NB_SHARK)) {
+			nbShark = Integer.parseInt(cmd.getOptionValue(NB_SHARK));
+		}
+
+		if (cmd.hasOption(NB_NEMO)) {
+			nbNemo = Integer.parseInt(cmd.getOptionValue(NB_NEMO));
+		}
+
+		if (cmd.hasOption(SURVIE_SHARK)) {
+			survieShark = Integer.parseInt(cmd.getOptionValue(SURVIE_SHARK));
+		}
+
+		if (cmd.hasOption(REPRODUCTION_NEMO)) {
+			reproductionNemo = Integer.parseInt(cmd.getOptionValue(REPRODUCTION_NEMO));
+		}
+
+		if (cmd.hasOption(REPRODUCTION_SHARK)) {
+			reproductionShark = Integer.parseInt(cmd.getOptionValue(REPRODUCTION_SHARK));
+		}
+
 		launch(args);
 	}
 
@@ -102,7 +158,7 @@ public class MainWater extends Application {
 					final Directions direction = Directions
 							.values()[Randomizer.randomGenerator.nextInt(Directions.values().length - 1) + 1];
 
-					Shark shark = new Shark(env, sma, posX, posY, direction);
+					Shark shark = new Shark(env, sma, posX, posY, direction, survieShark, reproductionShark);
 					sma.addAgent(shark);
 
 					ok = true;
@@ -123,7 +179,7 @@ public class MainWater extends Application {
 					final Directions direction = Directions
 							.values()[Randomizer.randomGenerator.nextInt(Directions.values().length - 1) + 1];
 
-					Nemo nemo = new Nemo(env, sma, posX, posY, direction);
+					Nemo nemo = new Nemo(env, sma, posX, posY, direction, reproductionNemo);
 					sma.addAgent(nemo);
 					ok = true;
 
