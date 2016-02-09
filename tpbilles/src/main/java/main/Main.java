@@ -1,16 +1,5 @@
 package main;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.List;
-
-import org.apache.commons.cli.CommandLine;
-import org.apache.commons.cli.CommandLineParser;
-import org.apache.commons.cli.DefaultParser;
-import org.apache.commons.cli.HelpFormatter;
-import org.apache.commons.cli.Options;
-import org.apache.commons.cli.ParseException;
-
 import core.Directions;
 import core.Environnement;
 import core.SMA;
@@ -29,7 +18,12 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import org.apache.commons.cli.*;
 import tools.Randomizer;
+
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
 
 public class Main extends Application {
 
@@ -136,13 +130,13 @@ public class Main extends Application {
 	}
 
 	public static void main(String[] args) {
-		options.addOption(LARGEUR, false, "largeur de la grille");
-		options.addOption(HAUTEUR, false, "hauteur de la grille");
-		options.addOption(NOMBRE_BILLES, false, "nombre de billes");
-		options.addOption(TORIQUE, false, "la présence de cet argument précise que la grille est torique");
+		options.addOption(LARGEUR, true, "largeur de la grille");
+		options.addOption(HAUTEUR, true, "hauteur de la grille");
+		options.addOption(NOMBRE_BILLES, true, "nombre de billes");
+		options.addOption(TORIQUE, false, "la prÃ©sence de cet argument prï¿½cise que la grille est torique");
 
 		HelpFormatter formatter = new HelpFormatter();
-		formatter.printHelp("Hunter", options);
+		formatter.printHelp("Billes", options);
 
 		CommandLineParser parser = new DefaultParser();
 		CommandLine cmd = null;

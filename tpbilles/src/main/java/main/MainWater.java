@@ -1,19 +1,5 @@
 package main;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.List;
-import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-
-import org.apache.commons.cli.CommandLine;
-import org.apache.commons.cli.CommandLineParser;
-import org.apache.commons.cli.DefaultParser;
-import org.apache.commons.cli.HelpFormatter;
-import org.apache.commons.cli.Options;
-import org.apache.commons.cli.ParseException;
-
 import core.Directions;
 import core.Environnement;
 import core.SMA;
@@ -29,18 +15,22 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Scene;
-import javafx.scene.chart.AreaChart;
-import javafx.scene.chart.LineChart;
-import javafx.scene.chart.NumberAxis;
-import javafx.scene.chart.PieChart;
-import javafx.scene.chart.XYChart;
+import javafx.scene.chart.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import org.apache.commons.cli.*;
 import tools.Randomizer;
+
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
+import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class MainWater extends Application {
 
@@ -88,14 +78,14 @@ public class MainWater extends Application {
 
 	public static void main(String[] args) {
 
-		// gère les arguments
-		options.addOption(NB_SHARK, false, "nombre de requin au départ");
-		options.addOption(NB_NEMO, false, "nombre de poissons au départ");
-		options.addOption(SURVIE_SHARK, false, "nombre de tours durant lesquels un requin survis sans manger");
-		options.addOption(REPRODUCTION_SHARK, false, "nombre de tours avant la reproduction des requins");
-		options.addOption(REPRODUCTION_NEMO, false, "nombre de tours avant la reproduction des poissons");
-		options.addOption(HAUTEUR, false, "hauteur de la grille");
-		options.addOption(LARGEUR, false, "largeur de la grille");
+		// gï¿½re les arguments
+		options.addOption(NB_SHARK, true, "nombre de requin au dï¿½part");
+		options.addOption(NB_NEMO, true, "nombre de poissons au dï¿½part");
+		options.addOption(SURVIE_SHARK, true, "nombre de tours durant lesquels un requin survis sans manger");
+		options.addOption(REPRODUCTION_SHARK, true, "nombre de tours avant la reproduction des requins");
+		options.addOption(REPRODUCTION_NEMO, true, "nombre de tours avant la reproduction des poissons");
+		options.addOption(HAUTEUR, true, "hauteur de la grille");
+		options.addOption(LARGEUR, true, "largeur de la grille");
 
 		HelpFormatter formatter = new HelpFormatter();
 		formatter.printHelp("Wator", options);
