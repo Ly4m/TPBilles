@@ -25,11 +25,12 @@ import java.util.*;
 
 public class Main extends Application {
 
-    private static int largeur = 8500;
-    private static int hauteur = 4200;
-    private static int nbAgents = 500;
+    private static int largeur = 150;
+    private static int hauteur = 250;
+    private static int nbAgents = 1000;
     private static int tempsAttente = 120;
     private static int tempsArret = 0;
+    private boolean torique = false;
     private static long seed = Calendar.getInstance().getTimeInMillis();
 
     public static List<Circle> Circle;
@@ -41,18 +42,19 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
 
-        Circle = new ArrayList<Circle>();
+        Circle = new ArrayList<>();
 
         CircleObs = FXCollections.observableArrayList(Circle);
 
         Randomizer.setSeed(seed);
         final Environnement env = new Environnement(largeur, hauteur);
         final SMA sma = new SMA(env);
-        boolean ok = false;
+        boolean ok;
 
 //         Ajout des murs
-        final int nbCasesY = hauteur / 5;
-        final int nbCasesX = largeur / 5;
+        final int nbCasesY = hauteur;
+        final int nbCasesX = largeur;
+        if(!torique) {
         for (int i = 0; i < nbCasesY; i++) {
             sma.addAgent(new Mur(env, sma, 0, i, Mur.TypeMur.VERTICAL));
             sma.addAgent(new Mur(env, sma, nbCasesX - 1, i, Mur.TypeMur.VERTICAL));
@@ -61,11 +63,12 @@ public class Main extends Application {
             sma.addAgent(new Mur(env, sma, i, 0, Mur.TypeMur.HORIZONTAL));
             sma.addAgent(new Mur(env, sma, i, nbCasesY - 1, Mur.TypeMur.HORIZONTAL));
         }
+        }
 
 
 
         canvas = new Pane();
-        final Scene scene = new Scene(canvas, largeur / 5, hauteur / 5);
+        final Scene scene = new Scene(canvas, largeur * 5, hauteur * 5);
 
 
         primaryStage.setTitle("Bouncy Bounce");
@@ -76,7 +79,6 @@ public class Main extends Application {
 //         Ajout des agents
         for (int i = 0; i < nbAgents; i++) {
             ok = false;
-            Color couleur = new Color(0.4, 0.2, 0.3, 1);
             while (!ok) {
                 try {
                     final int posX = Randomizer.randomGenerator.nextInt(env.getLocations()[0].length);
@@ -88,7 +90,6 @@ public class Main extends Application {
                     sma.addAgent(bille);
 
                     ok = true;
-
 
                     CircleObs.add(bille.getCircle());
                 } catch (IllegalArgumentException ignore) {
@@ -110,15 +111,10 @@ public class Main extends Application {
 
         System.out.println(env.getLocations().length);
 
-        final Timeline loop = new Timeline(new KeyFrame(Duration.millis(5), new EventHandler<ActionEvent>() {
+        final Timeline loop = new Timeline(new KeyFrame(Duration.millis(10), t -> {
 
+            sma.run();
 
-            public void handle(final ActionEvent t) {
-
-
-                sma.run();
-
-            }
         }));
 
 
@@ -128,64 +124,6 @@ public class Main extends Application {
     }
 
     public static void main(String[] args) {
-
-
-        Randomizer.setSeed(seed);
-
-        final Environnement env = new Environnement(largeur, hauteur);
-        final SMA sma = new SMA(env);
-        boolean ok = false;
-
-        // Ajout des murs
-        final int nbCasesY = hauteur / AgentPhysique.getTaille();
-        final int nbCasesX = largeur / AgentPhysique.getTaille();
-        for (int i = 0; i < nbCasesY; i++) {
-            sma.addAgent(new Mur(env, sma, 0, i, Mur.TypeMur.VERTICAL));
-            sma.addAgent(new Mur(env, sma, nbCasesX - 1, i, Mur.TypeMur.VERTICAL));
-        }
-        for (int i = 1; i < nbCasesX - 1; i++) {
-            sma.addAgent(new Mur(env, sma, i, 0, Mur.TypeMur.HORIZONTAL));
-            sma.addAgent(new Mur(env, sma, i, nbCasesY - 1, Mur.TypeMur.HORIZONTAL));
-        }
-
-        // Ajout des agents
-        for (int i = 0; i < nbAgents; i++) {
-            ok = false;
-            while (!ok) {
-                try {
-                    final int posX = Randomizer.randomGenerator.nextInt(env.getLocations()[0].length);
-                    final int posY = Randomizer.randomGenerator.nextInt(env.getLocations().length);
-                    final Directions direction = Directions.values()[Randomizer.randomGenerator
-                            .nextInt(Directions.values().length - 1) + 1];
-                    sma.addAgent(new Bille(env, sma, posX, posY, direction));
-                    ok = true;
-                } catch (IllegalArgumentException ignore) {
-                }
-            }
-        }
-
-
-
-        final long start = Calendar.getInstance().getTimeInMillis();
-        final long stop = tempsArret * 1000;
-        int nbTours = 0;
-        double tempsTotalRun = 0;
-        while (stop == 0
-                || Calendar.getInstance().getTimeInMillis() - start < stop) {
-            final long startTour = Calendar.getInstance().getTimeInMillis();
-            sma.run();
-            tempsTotalRun += Calendar.getInstance().getTimeInMillis()
-                    - startTour;
-            nbTours++;
-            try {
-                Thread.sleep(tempsAttente);
-            } catch (final InterruptedException ignore) {
-            }
-        }
-        System.out.println(nbTours + " tours d'une moyenne de " + tempsTotalRun
-                / nbTours + " millisecondes chacun");
-        System.exit(0);
-
         launch(args);
     }
 }

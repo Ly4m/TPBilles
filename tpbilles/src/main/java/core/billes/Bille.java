@@ -10,9 +10,6 @@ import tools.Randomizer;
 
 import java.awt.*;
 
-/**
- * Created by William on 19/01/2016.
- */
 public class Bille extends AgentBille {
 
     public Circle getCircle() {
@@ -35,7 +32,7 @@ public class Bille extends AgentBille {
         this.couleur = new Color((float)red/100, (float)green/100, (float)blue/100, 1.0);
 
         this.Circle = new Circle(2.5, couleur);
-        this.Circle.relocate(posX / 5, posY / 5);
+        this.Circle.relocate(posX * 5, posY * 5);
     }
 
     @Override
@@ -54,8 +51,12 @@ public class Bille extends AgentBille {
 
     @Override
     public void decide() {
-        int nextPosX = posX + direction.getDirX();
-        int nextPosY = posY + direction.getDirY();
+//        int nextPosX = posX + direction.getDirX();
+//        int nextPosY = posY + direction.getDirY();
+
+        int nextPosX = (posX + direction.getDirX() + environnement.getLargeur()) % environnement.getLargeur();
+        int nextPosY = (posY + direction.getDirY() + environnement.getHauteur()) % environnement.getHauteur();
+
         AgentPhysique[][] locations = environnement.getLocations();
 
         AgentBille agentPresent = (AgentBille) locations[nextPosY][nextPosX];
@@ -69,7 +70,7 @@ public class Bille extends AgentBille {
         posX = nextPosX;
         posY = nextPosY;
         locations[posY][posX] = this;
-        this.Circle.relocate(posX, posY);
+        this.Circle.relocate(posX * 5, posY * 5);
 
     }
 }

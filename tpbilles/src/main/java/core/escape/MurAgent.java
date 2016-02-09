@@ -7,9 +7,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import main.MainEscape;
 
-/**
- * Created by leemans on 27/01/16.
- */
 public class MurAgent extends AgentPhysique {
 
 	private Rectangle rectangle;

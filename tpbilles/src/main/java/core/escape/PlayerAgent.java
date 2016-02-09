@@ -9,9 +9,6 @@ import javafx.scene.shape.Rectangle;
 import main.MainEscape;
 import tools.DijkstraCalculator;
 
-/**
- * Created by leemans on 27/01/16.
- */
 public class PlayerAgent extends AgentPhysique {
 	private Directions direction;
 	private Rectangle rectangle;

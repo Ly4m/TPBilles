@@ -35,8 +35,6 @@ public class MainEscape extends Application {
 	private static int largeur = 100;
 	private static int hauteur = 100;
 	private static int nbHunter = 1;
-	private static int tempsAttente = 120;
-	private static int tempsArret = 0;
 	private static int pourcentageMur = 15;
 	private static long seed = Calendar.getInstance().getTimeInMillis();
 

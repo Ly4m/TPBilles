@@ -8,9 +8,6 @@ import javafx.scene.shape.Rectangle;
 import main.MainEscape;
 import tools.Position;
 
-/**
- * Created by leemans on 27/01/16.
- */
 public class ZombieAgent extends AgentPhysique {
 
     private Rectangle rectangle;
