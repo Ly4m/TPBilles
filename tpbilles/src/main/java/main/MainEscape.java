@@ -29,7 +29,7 @@ import java.util.Calendar;
 
 public class MainEscape extends Application {
     /*
-	 * figer le jeu quand on est attrapp�
+	 * figer le jeu quand on est attrappé
 	 * 
 	 * vitesses variables
 	 * 
@@ -53,7 +53,7 @@ public class MainEscape extends Application {
     private static int tempsAttente = 120;
     private static int tempsArret = 0;
     private static int pourcentageMur = 5;
-    private static int vitesseAvatar = 1;
+    public static int vitesseAvatar = 1;
     private static long seed = Calendar.getInstance().getTimeInMillis();
 
     // Escape fields
@@ -97,7 +97,6 @@ public class MainEscape extends Application {
         final int nbCasesY = hauteur;
         final int nbCasesX = largeur;
         for (int i = 0; i < nbCasesY; i++) {
-            System.out.println("i : " + i);
             sma.addAgent((new MurAgent(environnement, sma, 0, i)));
             sma.addAgent((new MurAgent(environnement, sma, nbCasesX - 1, i)));
         }
@@ -208,11 +207,11 @@ public class MainEscape extends Application {
 
     public static void main(String[] args) {
 
-        // g�re les arguments
+        // gère les arguments
         options.addOption(LARGEUR, true, "largeur de la grille");
         options.addOption(HAUTEUR, true, "hauteur de la grille");
         options.addOption(NB_HUNTER, true, "nombre de chasseurs");
-        options.addOption(POURCENTAGE_MUR, true, "pourcentage de mur pr�sent dans la grille");
+        options.addOption(POURCENTAGE_MUR, true, "pourcentage de mur présent dans la grille");
         options.addOption(VITESSE_AVATAR, true, "vitesse du joueur par rapport aux chasseurs");
 
         HelpFormatter formatter = new HelpFormatter();

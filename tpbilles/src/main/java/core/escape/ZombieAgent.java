@@ -8,9 +8,6 @@ import javafx.scene.shape.Rectangle;
 import main.MainEscape;
 import tools.Position;
 
-/**
- * Created by leemans on 27/01/16.
- */
 public class ZombieAgent extends AgentPhysique {
 
     private Rectangle rectangle;
@@ -29,7 +26,7 @@ public class ZombieAgent extends AgentPhysique {
 
     @Override
     public void decide() {
-        if (MainEscape.roundCount % Integer.parseInt(MainEscape.VITESSE_AVATAR) == 0) {
+        if (MainEscape.roundCount % MainEscape.vitesseAvatar == 0) {
             Position goTo = dijkstraMove();
 
             environnement.removeAgent(this);
@@ -51,8 +48,9 @@ public class ZombieAgent extends AgentPhysique {
                 int value = MainEscape.dijkstra.grille[this.posY + i][this.posX + j];
                 if (value >= 0 && value < min && environnement.getLocations()[this.posY + i][this.posX + j] == null) {
                     min = value;
-                    if(min == 0)
+                    if(min == 1){
                         MainEscape.roundCount = -1;
+                    }
                     pos = new Position(this.posX + j, this.posY + i);
                 }
             }

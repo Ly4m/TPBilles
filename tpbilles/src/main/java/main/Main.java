@@ -75,7 +75,7 @@ public class Main extends Application {
 		}
 
 		canvas = new Pane();
-		final Scene scene = new Scene(canvas, largeur * 5, hauteur * 5);
+		final Scene scene = new Scene(canvas, largeur, hauteur);
 
 		primaryStage.setTitle("Bouncy Bounce");
 		primaryStage.setScene(scene);
