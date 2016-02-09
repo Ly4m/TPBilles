@@ -83,6 +83,8 @@ public class MainWater extends Application {
 	public static String SURVIE_SHARK = "survieShark";
 	public static String REPRODUCTION_SHARK = "reproductionShark";
 	public static String REPRODUCTION_NEMO = "reproductionNemo";
+	public static String LARGEUR = "largeur";
+	public static String HAUTEUR = "hauteur";
 
 	public static void main(String[] args) {
 
@@ -92,6 +94,8 @@ public class MainWater extends Application {
 		options.addOption(SURVIE_SHARK, false, "nombre de tours durant lesquels un requin survis sans manger");
 		options.addOption(REPRODUCTION_SHARK, false, "nombre de tours avant la reproduction des requins");
 		options.addOption(REPRODUCTION_NEMO, false, "nombre de tours avant la reproduction des poissons");
+		options.addOption(HAUTEUR, false, "hauteur de la grille");
+		options.addOption(LARGEUR, false, "largeur de la grille");
 
 		HelpFormatter formatter = new HelpFormatter();
 		formatter.printHelp("Wator", options);
@@ -122,6 +126,12 @@ public class MainWater extends Application {
 
 		if (cmd.hasOption(REPRODUCTION_SHARK)) {
 			reproductionShark = Integer.parseInt(cmd.getOptionValue(REPRODUCTION_SHARK));
+		}
+		if (cmd.hasOption(LARGEUR)) {
+			largeur = Integer.parseInt(cmd.getOptionValue(LARGEUR));
+		}
+		if (cmd.hasOption(HAUTEUR)) {
+			hauteur = Integer.parseInt(cmd.getOptionValue(HAUTEUR));
 		}
 
 		launch(args);
