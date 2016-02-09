@@ -2,9 +2,6 @@ package core;
 
 import java.util.*;
 
-/**
- * Created by William on 19/01/2016.
- */
 public class SMA {
 
     private Environnement env;
