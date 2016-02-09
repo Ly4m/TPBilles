@@ -1,15 +1,5 @@
 package main;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-
-import org.apache.commons.cli.CommandLine;
-import org.apache.commons.cli.CommandLineParser;
-import org.apache.commons.cli.DefaultParser;
-import org.apache.commons.cli.HelpFormatter;
-import org.apache.commons.cli.Options;
-import org.apache.commons.cli.ParseException;
-
 import core.Directions;
 import core.Environnement;
 import core.SMA;
@@ -29,21 +19,23 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import org.apache.commons.cli.*;
 import tools.DijkstraCalculator;
 import tools.Randomizer;
 
-/**
- * Created by leemans on 27/01/16.
- */
+import java.util.ArrayList;
+import java.util.Calendar;
+
+
 public class MainEscape extends Application {
 	/*
-	 * figer le jeu quand on est attrappé
+	 * figer le jeu quand on est attrappï¿½
 	 * 
 	 * vitesses variables
 	 * 
 	 * rapport :
 	 * 
-	 * Un UML général sur notre projet global
+	 * Un UML gï¿½nï¿½ral sur notre projet global
 	 * 
 	 * 3 partie => une par TP avec pour chaque le graph UML correspondant +
 	 * expliqation sur lancement et organisation
@@ -82,6 +74,8 @@ public class MainEscape extends Application {
 	public static String NB_HUNTER = "nbHunter";
 	public static String POURCENTAGE_MUR = "pourcentageMur";
 	public static String VITESSE_AVATAR = "vitesseAvatar";
+
+	public static int roundCount = 0;
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
@@ -213,11 +207,11 @@ public class MainEscape extends Application {
 
 	public static void main(String[] args) {
 
-		// gère les arguments
+		// gï¿½re les arguments
 		options.addOption(LARGEUR, false, "largeur de la grille");
 		options.addOption(HAUTEUR, false, "hauteur de la grille");
 		options.addOption(NB_HUNTER, false, "nombre de chasseurs");
-		options.addOption(POURCENTAGE_MUR, false, "pourcentage de mur présent dans la grille");
+		options.addOption(POURCENTAGE_MUR, false, "pourcentage de mur prï¿½sent dans la grille");
 		options.addOption(VITESSE_AVATAR, false, "vitesse du joueur par rapport aux chasseurs");
 
 		HelpFormatter formatter = new HelpFormatter();
