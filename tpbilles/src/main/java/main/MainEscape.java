@@ -3,6 +3,13 @@ package main;
 import java.util.ArrayList;
 import java.util.Calendar;
 
+import org.apache.commons.cli.CommandLine;
+import org.apache.commons.cli.CommandLineParser;
+import org.apache.commons.cli.DefaultParser;
+import org.apache.commons.cli.HelpFormatter;
+import org.apache.commons.cli.Options;
+import org.apache.commons.cli.ParseException;
+
 import core.Directions;
 import core.Environnement;
 import core.SMA;
@@ -46,12 +53,15 @@ public class MainEscape extends Application {
 
 	// Environment fields
 
+	static Options options = new Options();
+
 	private static int largeur = 130;
 	private static int hauteur = 130;
 	private static int nbHunter = 5;
 	private static int tempsAttente = 120;
 	private static int tempsArret = 0;
 	private static int pourcentageMur = 5;
+	private static int vitesseAvatar = 1;
 	private static long seed = Calendar.getInstance().getTimeInMillis();
 
 	// Escape fields
@@ -65,6 +75,13 @@ public class MainEscape extends Application {
 
 	public static Pane canvas;
 	public static DijkstraCalculator dijkstra;
+
+	// Param fields
+	public static String LARGEUR = "largeur";
+	public static String HAUTEUR = "hauteur";
+	public static String NB_HUNTER = "nbHunter";
+	public static String POURCENTAGE_MUR = "pourcentageMur";
+	public static String VITESSE_AVATAR = "vitesseAvatar";
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
@@ -180,7 +197,7 @@ public class MainEscape extends Application {
 			}
 		});
 
-		primaryStage.setTitle("Catch me bitch(es) !");
+		primaryStage.setTitle("Run forest run !");
 		primaryStage.setScene(scene);
 		primaryStage.show();
 
@@ -196,6 +213,42 @@ public class MainEscape extends Application {
 
 	public static void main(String[] args) {
 
+		// gère les arguments
+		options.addOption(LARGEUR, false, "largeur de la grille");
+		options.addOption(HAUTEUR, false, "hauteur de la grille");
+		options.addOption(NB_HUNTER, false, "nombre de chasseurs");
+		options.addOption(POURCENTAGE_MUR, false, "pourcentage de mur présent dans la grille");
+		options.addOption(VITESSE_AVATAR, false, "vitesse du joueur par rapport aux chasseurs");
+
+		HelpFormatter formatter = new HelpFormatter();
+		formatter.printHelp("Hunter", options);
+
+		CommandLineParser parser = new DefaultParser();
+		CommandLine cmd = null;
+
+		try {
+			cmd = parser.parse(options, args);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+
+		if (cmd.hasOption(LARGEUR)) {
+			largeur = Integer.parseInt(cmd.getOptionValue(LARGEUR));
+		}
+
+		if (cmd.hasOption(HAUTEUR)) {
+			hauteur = Integer.parseInt(cmd.getOptionValue(HAUTEUR));
+		}
+
+		if (cmd.hasOption(NB_HUNTER)) {
+			nbHunter = Integer.parseInt(cmd.getOptionValue(NB_HUNTER));
+		}
+		if (cmd.hasOption(POURCENTAGE_MUR)) {
+			pourcentageMur = Integer.parseInt(cmd.getOptionValue(POURCENTAGE_MUR));
+		}
+		if (cmd.hasOption(VITESSE_AVATAR)) {
+			vitesseAvatar = Integer.parseInt(cmd.getOptionValue(VITESSE_AVATAR));
+		}
 		launch(args);
 
 	}
