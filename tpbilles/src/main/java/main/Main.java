@@ -4,7 +4,13 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-import core.AgentPhysique;
+import org.apache.commons.cli.CommandLine;
+import org.apache.commons.cli.CommandLineParser;
+import org.apache.commons.cli.DefaultParser;
+import org.apache.commons.cli.HelpFormatter;
+import org.apache.commons.cli.Options;
+import org.apache.commons.cli.ParseException;
+
 import core.Directions;
 import core.Environnement;
 import core.SMA;
@@ -27,101 +33,144 @@ import tools.Randomizer;
 
 public class Main extends Application {
 
-    private static int largeur = 600;
-    private static int hauteur = 600;
-    private static int nbAgents = 500;
-    private static int tempsAttente = 120;
-    private static int tempsArret = 0;
-    private static long seed = Calendar.getInstance().getTimeInMillis();
-    private static boolean torrique = false;
+	static Options options = new Options();
 
-    public static List<Circle> Circle;
+	private static int largeur = 600;
+	private static int hauteur = 600;
+	private static int nbAgents = 500;
+	private static int tempsAttente = 120;
+	private static int tempsArret = 0;
+	private static long seed = Calendar.getInstance().getTimeInMillis();
+	private static boolean torrique = false;
 
-    public static ObservableList<Circle> CircleObs;
-    public static Pane canvas;
+	public static List<Circle> Circle;
 
-    @Override
-    public void start(Stage primaryStage) throws Exception {
+	public static ObservableList<Circle> CircleObs;
+	public static Pane canvas;
 
-        Circle = new ArrayList<Circle>();
+	// Param fields
+	public static String LARGEUR = "largeur";
+	public static String HAUTEUR = "hauteur";
+	public static String NOMBRE_BILLES = "nbBille";
+	public static String TORIQUE = "torique";
 
-        CircleObs = FXCollections.observableArrayList(Circle);
+	@Override
+	public void start(Stage primaryStage) throws Exception {
 
-        Randomizer.setSeed(seed);
-        final Environnement env = new Environnement(largeur, hauteur);
-        final SMA sma = new SMA(env);
-        boolean ok = false;
+		Circle = new ArrayList<Circle>();
 
-        // Ajout des murs
-        if (!torrique) {
-            final int nbCasesY = hauteur;
-            final int nbCasesX = largeur;
-            for (int i = 0; i < nbCasesY; i++) {
-                sma.addAgent(new Mur(env, sma, 0, i, Mur.TypeMur.VERTICAL));
-                sma.addAgent(new Mur(env, sma, nbCasesX - 1, i, Mur.TypeMur.VERTICAL));
-            }
-            for (int i = 1; i < nbCasesX - 1; i++) {
-                sma.addAgent(new Mur(env, sma, i, 0, Mur.TypeMur.HORIZONTAL));
-                sma.addAgent(new Mur(env, sma, i, nbCasesY - 1, Mur.TypeMur.HORIZONTAL));
-            }
-        }
+		CircleObs = FXCollections.observableArrayList(Circle);
 
-        canvas = new Pane();
-        final Scene scene = new Scene(canvas, largeur * 5, hauteur * 5);
+		Randomizer.setSeed(seed);
+		final Environnement env = new Environnement(largeur, hauteur);
+		final SMA sma = new SMA(env);
+		boolean ok = false;
 
-        primaryStage.setTitle("Bouncy Bounce");
-        primaryStage.setScene(scene);
-        primaryStage.show();
+		// Ajout des murs
+		if (!torrique) {
+			final int nbCasesY = hauteur;
+			final int nbCasesX = largeur;
+			for (int i = 0; i < nbCasesY; i++) {
+				sma.addAgent(new Mur(env, sma, 0, i, Mur.TypeMur.VERTICAL));
+				sma.addAgent(new Mur(env, sma, nbCasesX - 1, i, Mur.TypeMur.VERTICAL));
+			}
+			for (int i = 1; i < nbCasesX - 1; i++) {
+				sma.addAgent(new Mur(env, sma, i, 0, Mur.TypeMur.HORIZONTAL));
+				sma.addAgent(new Mur(env, sma, i, nbCasesY - 1, Mur.TypeMur.HORIZONTAL));
+			}
+		}
 
-        // Ajout des agents
-        for (int i = 0; i < nbAgents; i++) {
-            ok = false;
-            Color couleur = new Color(0.4, 0.2, 0.3, 1);
-            while (!ok) {
-                try {
-                    final int posX = Randomizer.randomGenerator.nextInt(env.getLocations()[0].length);
-                    final int posY = Randomizer.randomGenerator.nextInt(env.getLocations().length);
-                    final Directions direction = Directions
-                            .values()[Randomizer.randomGenerator.nextInt(Directions.values().length - 1) + 1];
+		canvas = new Pane();
+		final Scene scene = new Scene(canvas, largeur * 5, hauteur * 5);
 
-                    Bille bille = new Bille(env, sma, posX, posY, direction);
-                    sma.addAgent(bille);
+		primaryStage.setTitle("Bouncy Bounce");
+		primaryStage.setScene(scene);
+		primaryStage.show();
 
-                    ok = true;
+		// Ajout des agents
+		for (int i = 0; i < nbAgents; i++) {
+			ok = false;
+			Color couleur = new Color(0.4, 0.2, 0.3, 1);
+			while (!ok) {
+				try {
+					final int posX = Randomizer.randomGenerator.nextInt(env.getLocations()[0].length);
+					final int posY = Randomizer.randomGenerator.nextInt(env.getLocations().length);
+					final Directions direction = Directions
+							.values()[Randomizer.randomGenerator.nextInt(Directions.values().length - 1) + 1];
 
-                    CircleObs.add(bille.getCircle());
-                } catch (IllegalArgumentException ignore) {
-                }
-            }
+					Bille bille = new Bille(env, sma, posX, posY, direction);
+					sma.addAgent(bille);
 
-        }
+					ok = true;
 
-        // Circle.forEach(b -> canvas.getChildren().addAll(b));
+					CircleObs.add(bille.getCircle());
+				} catch (IllegalArgumentException ignore) {
+				}
+			}
 
-        canvas.getChildren().addAll(CircleObs);
+		}
 
-        final long start = Calendar.getInstance().getTimeInMillis();
-        final long stop = tempsArret * 1000;
-        int nbTours = 0;
-        double tempsTotalRun = 0;
+		// Circle.forEach(b -> canvas.getChildren().addAll(b));
 
-        System.out.println(env.getLocations().length);
+		canvas.getChildren().addAll(CircleObs);
 
-        final Timeline loop = new Timeline(new KeyFrame(Duration.millis(5), new EventHandler<ActionEvent>() {
+		final long start = Calendar.getInstance().getTimeInMillis();
+		final long stop = tempsArret * 1000;
+		int nbTours = 0;
+		double tempsTotalRun = 0;
 
-            public void handle(final ActionEvent t) {
+		System.out.println(env.getLocations().length);
 
-                sma.run();
+		final Timeline loop = new Timeline(new KeyFrame(Duration.millis(5), new EventHandler<ActionEvent>() {
 
-            }
-        }));
+			public void handle(final ActionEvent t) {
 
-        loop.setCycleCount(Timeline.INDEFINITE);
-        loop.play();
+				sma.run();
 
-    }
+			}
+		}));
 
-    public static void main(String[] args) {
-        launch(args);
-    }
+		loop.setCycleCount(Timeline.INDEFINITE);
+		loop.play();
+
+	}
+
+	public static void main(String[] args) {
+		options.addOption(LARGEUR, false, "largeur de la grille");
+		options.addOption(HAUTEUR, false, "hauteur de la grille");
+		options.addOption(NOMBRE_BILLES, false, "nombre de billes");
+		options.addOption(TORIQUE, false, "la présence de cet argument précise que la grille est torique");
+
+		HelpFormatter formatter = new HelpFormatter();
+		formatter.printHelp("Hunter", options);
+
+		CommandLineParser parser = new DefaultParser();
+		CommandLine cmd = null;
+
+		try {
+			cmd = parser.parse(options, args);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+
+		if (cmd.hasOption(LARGEUR)) {
+			System.out.println(cmd.getOptionValue(LARGEUR));
+			largeur = Integer.parseInt(cmd.getOptionValue(LARGEUR));
+		}
+
+		if (cmd.hasOption(HAUTEUR)) {
+			hauteur = Integer.parseInt(cmd.getOptionValue(HAUTEUR));
+		}
+		if (cmd.hasOption(NOMBRE_BILLES)) {
+			nbAgents = Integer.parseInt(cmd.getOptionValue(NOMBRE_BILLES));
+			System.out.println("nombre de billes argument : " + cmd.getOptionValue(NOMBRE_BILLES));
+		}
+		if (cmd.hasOption(TORIQUE)) {
+			torrique = true;
+		} else {
+			torrique = false;
+		}
+
+		launch(args);
+	}
 }

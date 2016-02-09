@@ -109,6 +109,7 @@ public class MainWater extends Application {
 		}
 
 		if (cmd.hasOption(NB_SHARK)) {
+			System.out.println(cmd.getOptionValue(NB_SHARK));
 			nbShark = Integer.parseInt(cmd.getOptionValue(NB_SHARK));
 		}
 
